@@ -23,6 +23,10 @@ class AppTheme {
         color: Colors.black,
         fontSize: 20,
       ),
+      caption: GoogleFonts.roboto(
+        color: Colors.black,
+        fontSize: 16,
+      ),
     ),
   );
 
