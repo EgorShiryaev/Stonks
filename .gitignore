@@ -51,3 +51,4 @@ app.*.map.json
 
 # Файл с API-KEY
 settings.json
+lib/settings.dart
