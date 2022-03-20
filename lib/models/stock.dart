@@ -1,6 +1,13 @@
+import 'package:hive/hive.dart';
+part 'stock.g.dart';
+
+@HiveType(typeId: 0)
 class Stock {
+  @HiveField(0)
   final String prefix;
-  double lastPrice;
+  @HiveField(1)
+   double lastPrice;
+  @HiveField(2)
   final String description;
 
   Stock({
@@ -8,14 +15,6 @@ class Stock {
     required this.lastPrice,
     required this.description,
   });
-
-  factory Stock.fromJson(Map<String, dynamic> json) {
-    return Stock(
-      prefix: json['s'],
-      lastPrice: double.parse(json['p'].toString()),
-      description: '',
-    );
-  }
 
   updateLastPrice(String newPrice) => lastPrice = double.parse(newPrice);
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stonks/widgets/search_stroke.dart';
+
+import 'search_stroke.dart';
+
 
 class StonksFlexibleAppBar extends StatelessWidget {
   const StonksFlexibleAppBar({Key? key}) : super(key: key);

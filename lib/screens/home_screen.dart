@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stonks/providers/finnhub_provider.dart';
-import 'package:stonks/widgets/stock_view.dart';
-import 'package:stonks/widgets/stonks_app_bar.dart';
-import 'package:stonks/widgets/stonks_flexiable_appbar.dart';
+import '../providers/stocks_provider.dart';
+import '../widgets/stock_view.dart';
+import '../widgets/stonks_app_bar.dart';
+import '../widgets/stonks_flexiable_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,9 +29,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             expandedHeight: 150.0,
           ),
-          SliverToBoxAdapter(child: Consumer<FinnhubProvider>(
-            builder: (context, finnhubProvider, child) {
-              return StockView(stocks: finnhubProvider.stocks);
+          SliverToBoxAdapter(child: Consumer<StocksProvider>(
+            builder: (context, stocksProvider, child) {
+              if (stocksProvider.loading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                );
+              }
+              return StockView(stocks: stocksProvider.stocks);
             },
           ))
         ],

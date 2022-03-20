@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/stock.dart';
 
 class StockView extends StatelessWidget {
