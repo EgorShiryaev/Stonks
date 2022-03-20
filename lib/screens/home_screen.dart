@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stonks/providers/prefix_provider.dart';
+import 'package:stonks/widgets/prefix_view.dart';
 import '../providers/stocks_provider.dart';
 import '../widgets/stock_view.dart';
 import '../widgets/stonks_app_bar.dart';
@@ -29,20 +31,37 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             expandedHeight: 150.0,
           ),
-          SliverToBoxAdapter(child: Consumer<StocksProvider>(
-            builder: (context, stocksProvider, child) {
-              if (stocksProvider.loading) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                  ),
-                );
-              }
-              return StockView(stocks: stocksProvider.stocks);
-            },
-          ))
+          SliverToBoxAdapter(child: Consumer<PrefixProvider>(
+              builder: (context, prefixProvider, child) {
+            if (prefixProvider.loading) {
+              return _loadingIndicator();
+            }
+            if (prefixProvider.prefixes.isNotEmpty) {
+              return PrefixView(prefixes: prefixProvider.prefixes);
+            }
+            return Consumer<StocksProvider>(
+              builder: (context, stocksProvider, child) {
+                if (stocksProvider.loading) {
+                  return _loadingIndicator();
+                }
+                return StockView(stocks: stocksProvider.stocks);
+              },
+            );
+          }))
         ],
       ),
     );
   }
+
+  _loadingIndicator() => SizedBox(
+        height: MediaQuery.of(context).size.height / 2,
+        child: const Align(
+          alignment: Alignment.bottomCenter,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
 }

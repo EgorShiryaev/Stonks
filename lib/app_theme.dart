@@ -15,6 +15,7 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: Colors.white,
     textTheme: TextTheme(
+      
       subtitle1: GoogleFonts.roboto(
         color: Colors.black,
         fontSize: 32,

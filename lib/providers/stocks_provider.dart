@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:stonks/models/stock.dart';
 import 'package:stonks/repositories/stocks_repository.dart';
 import '../services/last_price_service.dart';
 
@@ -9,7 +11,7 @@ class StocksProvider extends ChangeNotifier {
 
   bool _isLoading = true;
 
-  get stocks => _repository.stocks;
+  List<Stock> get stocks => _repository.stocks;
   get loading => _isLoading;
 
   void init() async {
@@ -21,12 +23,18 @@ class StocksProvider extends ChangeNotifier {
   }
 
   void add(String prefix, String description) {
-    _repository.add(prefix, description);
-    notifyListeners();
+    final bool isNewStock = !stocks.any((el) => el.prefix == prefix);
+
+    if (isNewStock) {
+      _repository.add(prefix, description);
+      _lastPriceService.subscribe(prefix);
+      notifyListeners();
+    }
   }
 
   void delete(String prefix) {
     _repository.delete(prefix);
+    _lastPriceService.unsubscribe(prefix);
     notifyListeners();
   }
 

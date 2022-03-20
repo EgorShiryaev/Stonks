@@ -21,7 +21,7 @@ class LastPriceService {
     _channel.sink.add(json.encode({'type': 'subscribe', 'symbol': prefix}));
   }
 
-  unsubscride(String prefix) {
+  unsubscribe(String prefix) {
     log('Unsubscribe  $prefix lastPrice');
     _channel.sink.add(json.encode({'type': 'unsubscribe', 'symbol': prefix}));
   }

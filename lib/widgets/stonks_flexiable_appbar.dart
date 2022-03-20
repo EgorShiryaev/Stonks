@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stonks/providers/prefix_provider.dart';
 
 import 'search_stroke.dart';
-
 
 class StonksFlexibleAppBar extends StatelessWidget {
   const StonksFlexibleAppBar({Key? key}) : super(key: key);
@@ -10,15 +11,17 @@ class StonksFlexibleAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return Container(
-      padding: EdgeInsets.only(top: statusBarHeight, left: 15, right: 15),
+      padding: EdgeInsets.only(
+        top: statusBarHeight,
+        left: 15,
+        right: 15,
+      ),
       height: appBarHeight + statusBarHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SearchStroke(),
-          const SizedBox(
-            height: 20,
-          )
+          const SizedBox(height: 20),
         ],
       ),
     );

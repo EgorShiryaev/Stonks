@@ -6,7 +6,7 @@ class Stock {
   @HiveField(0)
   final String prefix;
   @HiveField(1)
-   double lastPrice;
+  double lastPrice;
   @HiveField(2)
   final String description;
 
@@ -17,4 +17,12 @@ class Stock {
   });
 
   updateLastPrice(String newPrice) => lastPrice = double.parse(newPrice);
+
+  factory Stock.fromSearchService(Map<String, dynamic> json) {
+    return Stock(
+      prefix: json['symbol'],
+      lastPrice: 0,
+      description: json['description'],
+    );
+  }
 }
