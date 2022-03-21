@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:stonks/models/stock.dart';
 import 'package:stonks/settings.dart';
 import 'package:http/http.dart' as http;
 
-class PrefixService {
+class SearchStockService {
   final client = http.Client();
 
   Future<List<Stock>> get(String query) async {

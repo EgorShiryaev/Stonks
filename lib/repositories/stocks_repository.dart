@@ -26,21 +26,13 @@ class StocksRepository {
     }
   }
 
-  _addFirstRunStock() {
-    firstRunStocks.forEach((element) {
-      add(element.prefix, element.description);
-    });
-  }
+  _addFirstRunStock() => firstRunStocks.forEach((element) => add(element));
 
-  add(String prefix, String description) {
-    final newStock = Stock(
-      prefix: prefix,
-      lastPrice: 0,
-      description: description,
-    );
-    _stocks.add(newStock);
-    _stocksLocalDataSource.add(newStock);
-    log('Add new stock: $prefix');
+  add(Stock stock) {
+    _stocks.add(stock);
+    _stocks.sort(((a, b) => a.prefix.compareTo(b.prefix)));
+    _stocksLocalDataSource.add(stock);
+    log('Add new stock: ${stock.prefix}');
   }
 
   update(Stock stock, String price) {

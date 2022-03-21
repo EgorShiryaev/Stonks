@@ -1,33 +1,38 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:stonks/models/stock.dart';
 import 'package:stonks/repositories/stocks_repository.dart';
+import 'package:stonks/services/search_stock_service.dart';
+import '../models/stock.dart';
 import '../services/last_price_service.dart';
 
 class StocksProvider extends ChangeNotifier {
   final _repository = StocksRepository();
   final _lastPriceService = LastPriceService();
+  final _searchStockService = SearchStockService();
 
-  bool _isLoading = true;
+  bool _savedStocksIsLoading = true;
+  bool _searchStocksIsLoading = false;
+  bool _searching = false;
+  List<Stock> _searchedStocks = [];
 
+  bool get savedStockisLoading => _savedStocksIsLoading;
+  bool get searchStocksIsLoading => _searchStocksIsLoading;
+  bool get searching => _searching;
   List<Stock> get stocks => _repository.stocks;
-  get loading => _isLoading;
+  List<Stock> get searchedStock => _searchedStocks;
 
   void init() async {
     await _repository.init();
     _lastPriceService.init(stocks);
     _subscribeToNewPrices();
-    _isLoading = false;
+    _savedStocksIsLoading = false;
     notifyListeners();
   }
 
-  void add(String prefix, String description) {
-    final bool isNewStock = !stocks.any((el) => el.prefix == prefix);
-
-    if (isNewStock) {
-      _repository.add(prefix, description);
-      _lastPriceService.subscribe(prefix);
+  void add(Stock stock) {
+    if (!stocks.any((el) => el.prefix == stock.prefix)) {
+      _repository.add(stock);
+      _lastPriceService.subscribe(stock.prefix);
       notifyListeners();
     }
   }
@@ -62,6 +67,23 @@ class StocksProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  void searchStock(String query) async {
+    if (query.isNotEmpty) {
+      _searching = true;
+      _searchStocksIsLoading = true;
+      notifyListeners();
+      _searchedStocks = await _searchStockService.get(query);
+      _searchStocksIsLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void deleteSearchedStocks() {
+    _searchedStocks.clear();
+    _searching = false;
+    notifyListeners();
   }
 
   @override

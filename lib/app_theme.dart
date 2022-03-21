@@ -14,8 +14,13 @@ class AppTheme {
       background: Colors.white,
     ),
     scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: false,
+      toolbarHeight: 70,
+    ),
+    dividerColor: Colors.grey.shade700,
     textTheme: TextTheme(
-      
       subtitle1: GoogleFonts.roboto(
         color: Colors.black,
         fontSize: 32,
@@ -28,20 +33,10 @@ class AppTheme {
         color: Colors.black,
         fontSize: 16,
       ),
+      bodyText1: GoogleFonts.roboto(
+        color: Colors.grey.shade700,
+        fontSize: 20,
+      ),
     ),
-  );
-
-  final dark = ThemeData(
-    colorScheme: const ColorScheme.dark(
-      primary: Colors.black,
-      onPrimary: Colors.white,
-      secondary: Colors.white,
-      onSecondary: Colors.black,
-      shadow: Colors.grey,
-      surface: Colors.black,
-      error: Colors.red,
-      background: Colors.black,
-    ),
-    scaffoldBackgroundColor: Colors.black,
   );
 }

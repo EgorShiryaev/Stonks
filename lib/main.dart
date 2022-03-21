@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/app_theme.dart';
-import 'package:stonks/providers/prefix_provider.dart';
 import 'package:stonks/providers/stocks_provider.dart';
 import 'package:stonks/screens/home_screen.dart';
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => StocksProvider()..init()),
-          ChangeNotifierProvider(create: ((context) => PrefixProvider())),
         ],
         child: const HomeScreen(),
       ),

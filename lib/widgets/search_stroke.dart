@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stonks/providers/prefix_provider.dart';
+import 'package:stonks/providers/stocks_provider.dart';
 
-class SearchStroke extends StatelessWidget {
-  SearchStroke({Key? key}) : super(key: key);
-
-  final controller = TextEditingController();
+class SearchStroke extends StatefulWidget {
+  final TextEditingController controller;
+  const SearchStroke({Key? key, required this.controller}) : super(key: key);
 
   @override
+  State<SearchStroke> createState() => _SearchStrokeState();
+}
+
+class _SearchStrokeState extends State<SearchStroke> {
+  @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 10,
+    return SizedBox(
       child: TextField(
         decoration: InputDecoration(
           suffixIcon: IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.black),
-            onPressed: () =>
-                Provider.of<PrefixProvider>(context, listen: false).search(
-              controller.text,
-            ),
+            onPressed: _onSearch,
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade300,
           hintText: 'Поиск',
           hintStyle: Theme.of(context).textTheme.caption,
           filled: true,
@@ -30,23 +30,21 @@ class SearchStroke extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        controller: controller,
+        controller: widget.controller,
         style: Theme.of(context).textTheme.caption,
         cursorColor: Colors.black12,
-        onChanged: (text) {
-          if (text.isEmpty) {
-            Provider.of<PrefixProvider>(context, listen: false).clear();
-          }
-        },
-        onSubmitted: (text) {
-          if (text.isEmpty) {
-            Provider.of<PrefixProvider>(context, listen: false).search(
-              text,
-            );
-          }
-        },
-        
+        onChanged: _onChanged,
       ),
     );
+  }
+
+  _onSearch() => Provider.of<StocksProvider>(context, listen: false)
+      .searchStock(widget.controller.text);
+
+  _onChanged(String text){
+    if (text.isEmpty){
+      Provider.of<StocksProvider>(context, listen: false)
+      .deleteSearchedStocks();
+    }
   }
 }
