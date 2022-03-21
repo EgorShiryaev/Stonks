@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/widgets/snack_bar_content.dart';
@@ -14,8 +15,23 @@ class StockWidget extends StatefulWidget {
 }
 
 class _StockWidgetState extends State<StockWidget> {
+  bool needSubscribe = true;
+
+  @override
+  void deactivate() {
+    Provider.of<StocksProvider>(context)
+        .unsubscribeToLastPrice(widget.stock.prefix);
+    needSubscribe = true;
+    super.deactivate();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (needSubscribe) {
+      Provider.of<StocksProvider>(context)
+          .subscribeToLastPrice(widget.stock.prefix);
+      needSubscribe = false;
+    }
     return Dismissible(
       key: Key(widget.stock.prefix),
       direction: DismissDirection.endToStart,
@@ -29,38 +45,32 @@ class _StockWidgetState extends State<StockWidget> {
         ),
       ),
       onDismissed: _onDismissed,
-      child: Container(
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.stock.prefix,
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-                Text(widget.stock.description)
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.stock.prefix,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                  Text(
+                    widget.stock.description,
+                    style: Theme.of(context).textTheme.caption,
+                  )
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '${(widget.stock.lastPrice).toStringAsFixed(2)} \$',
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-                widget.stock.lastPrice != 0.0
-                    ? const SizedBox()
-                    : const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Icon(
-                          Icons.av_timer,
-                        ),
-                      )
-              ],
-            ),
+            widget.stock.lastPrice != 0
+                ? Text(
+                    '${(widget.stock.lastPrice).toStringAsFixed(2)} \$',
+                    style: Theme.of(context).textTheme.subtitle2,
+                  )
+                : const Icon(Icons.av_timer),
           ],
         ),
       ),

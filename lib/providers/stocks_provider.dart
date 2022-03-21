@@ -10,31 +10,29 @@ class StocksProvider extends ChangeNotifier {
   final _lastPriceService = LastPriceService();
   final _searchStockService = SearchStockService();
 
+  int _nQuery = 0;
+
   bool _savedStocksIsLoading = true;
   bool _searchStocksIsLoading = false;
   bool _searching = false;
   List<Stock> _searchedStocks = [];
 
-  bool get savedStockisLoading => _savedStocksIsLoading;
+  bool get savedStocksIsLoading => _savedStocksIsLoading;
   bool get searchStocksIsLoading => _searchStocksIsLoading;
   bool get searching => _searching;
   List<Stock> get stocks => _repository.stocks;
-  List<Stock> get searchedStock => _searchedStocks;
+  List<Stock> get searchedStocks => _searchedStocks;
 
   void init() async {
     await _repository.init();
-    _lastPriceService.init(stocks);
-    _subscribeToNewPrices();
     _savedStocksIsLoading = false;
     notifyListeners();
+    _setListnerToNewPrices();
   }
 
   void add(Stock stock) {
-    if (!stocks.any((el) => el.prefix == stock.prefix)) {
-      _repository.add(stock);
-      _lastPriceService.subscribe(stock.prefix);
-      notifyListeners();
-    }
+    _repository.add(stock);
+    notifyListeners();
   }
 
   void delete(String prefix) {
@@ -43,7 +41,22 @@ class StocksProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _subscribeToNewPrices() {
+  void searchStock(String query) async {
+    if (query.isNotEmpty) {
+      _nQuery++;
+      _searching = true;
+      _searchStocksIsLoading = true;
+      notifyListeners();
+      _searchedStocks = await _searchStockService.get(query);
+      _searchStocksIsLoading = false;
+      _nQuery--;
+      if (_nQuery == 0) {
+        notifyListeners();
+      }
+    }
+  }
+
+  void _setListnerToNewPrices() {
     _lastPriceService.stream.listen((event) {
       bool priceIsChange = false;
       final List? data = json.decode(event)['data'];
@@ -69,22 +82,16 @@ class StocksProvider extends ChangeNotifier {
     });
   }
 
-  void searchStock(String query) async {
-    if (query.isNotEmpty) {
-      _searching = true;
-      _searchStocksIsLoading = true;
-      notifyListeners();
-      _searchedStocks = await _searchStockService.get(query);
-      _searchStocksIsLoading = false;
-      notifyListeners();
-    }
-  }
-
   void deleteSearchedStocks() {
     _searchedStocks.clear();
     _searching = false;
     notifyListeners();
   }
+
+  subscribeToLastPrice(String prefix) => _lastPriceService.subscribe(prefix);
+
+  unsubscribeToLastPrice(String prefix) =>
+      _lastPriceService.unsubscribe(prefix);
 
   @override
   void dispose() async {

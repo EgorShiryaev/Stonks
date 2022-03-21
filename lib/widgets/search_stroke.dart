@@ -16,9 +16,15 @@ class _SearchStrokeState extends State<SearchStroke> {
     return SizedBox(
       child: TextField(
         decoration: InputDecoration(
-          suffixIcon: IconButton(
+          prefixIcon: IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.black),
             onPressed: _onSearch,
+            splashColor: Colors.white,
+          ),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.clear, color: Colors.black),
+            onPressed: _onClear,
+            splashColor: Colors.white,
           ),
           fillColor: Colors.grey.shade300,
           hintText: 'Поиск',
@@ -41,10 +47,15 @@ class _SearchStrokeState extends State<SearchStroke> {
   _onSearch() => Provider.of<StocksProvider>(context, listen: false)
       .searchStock(widget.controller.text);
 
-  _onChanged(String text){
-    if (text.isEmpty){
+  _onChanged(String text) {
+    if (text.isEmpty) {
       Provider.of<StocksProvider>(context, listen: false)
-      .deleteSearchedStocks();
+          .deleteSearchedStocks();
     }
+  }
+
+  _onClear() {
+    widget.controller.clear();
+    Provider.of<StocksProvider>(context, listen: false).deleteSearchedStocks();
   }
 }

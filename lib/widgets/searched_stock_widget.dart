@@ -20,15 +20,20 @@ class _SearchedStockWidgetState extends State<SearchedStockWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.stock.prefix,
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-              Text(widget.stock.description)
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.stock.prefix,
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+                Text(
+                  widget.stock.description,
+                  style: Theme.of(context).textTheme.caption,
+                )
+              ],
+            ),
           ),
           !Provider.of<StocksProvider>(context, listen: false)
                   .stocks

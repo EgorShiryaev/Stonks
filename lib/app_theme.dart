@@ -20,6 +20,7 @@ class AppTheme {
       toolbarHeight: 70,
     ),
     dividerColor: Colors.grey.shade700,
+    highlightColor: Colors.grey.shade100,
     textTheme: TextTheme(
       subtitle1: GoogleFonts.roboto(
         color: Colors.black,
