@@ -21,11 +21,13 @@ class _SearchStrokeState extends State<SearchStroke> {
             onPressed: _onSearch,
             splashColor: Colors.white,
           ),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.clear, color: Colors.black),
-            onPressed: _onClear,
-            splashColor: Colors.white,
-          ),
+          suffixIcon: widget.controller.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear, color: Colors.black),
+                  onPressed: _onClear,
+                  splashColor: Colors.white,
+                )
+              : null,
           fillColor: Colors.grey.shade300,
           hintText: 'Поиск',
           hintStyle: Theme.of(context).textTheme.caption,

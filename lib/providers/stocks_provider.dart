@@ -50,6 +50,9 @@ class StocksProvider extends ChangeNotifier {
       _searchedStocks = await _searchStockService.get(query);
       _searchStocksIsLoading = false;
       _nQuery--;
+      if (!searching) {
+        _searchedStocks.clear();
+      }
       if (_nQuery == 0) {
         notifyListeners();
       }
