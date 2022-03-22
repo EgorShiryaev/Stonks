@@ -1,61 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/providers/stocks_provider.dart';
+import 'package:stonks/widgets/empty_saved_stocks_list.dart';
+import 'package:stonks/widgets/loading_indicator.dart';
+import 'package:stonks/widgets/nothing_found_message.dart';
 import 'package:stonks/widgets/search_stroke.dart';
 import 'package:stonks/widgets/searched_stock_widget.dart';
 import 'package:stonks/widgets/stock_widget.dart';
 
-class HomeBody extends StatefulWidget {
-  const HomeBody({Key? key}) : super(key: key);
+class HomeBody extends StatelessWidget {
+  HomeBody({Key? key}) : super(key: key);
 
-  @override
-  State<HomeBody> createState() => _HomeBodyState();
-}
-
-class _HomeBodyState extends State<HomeBody> {
   final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<StocksProvider>(builder: (context, provider, child) {
-      final stocks = provider.stocks.where((element) {
-        final lowercaseSearchedText = searchController.text.toLowerCase();
-        return element.prefix.toLowerCase().contains(lowercaseSearchedText) ||
-            element.description.toLowerCase().contains(lowercaseSearchedText);
-      }).toList();
       return ListView.separated(
+        addAutomaticKeepAlives: false,
+        addSemanticIndexes: false,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        itemCount: _countItems(provider, stocks.length),
+        itemCount: _countItems(provider, provider.savedStocks.length),
         itemBuilder: (context, index) {
           if (index == 0) {
             return SearchStroke(controller: searchController);
           }
-          if (index > 0 && index <= stocks.length) {
-            return StockWidget(stock: stocks[index - 1]);
+          if (index > 0 && index <= provider.savedStocks.length) {
+            return StockWidget(stock: provider.savedStocks[index - 1]);
           }
-          if (provider.savedStocksIsLoading || provider.searchStocksIsLoading) {
-            return _loadingIndicator();
+          if (provider.loadingSavedStocks || provider.loadingSearchedStocks) {
+            return const LoadingIndicator();
           }
-          if (provider.stocks.isEmpty && !provider.searching) {
-            return _emptyList();
+          if (provider.savedStocks.isEmpty && !provider.searching) {
+            return const EmptySavedStocksList();
           }
-          if (!provider.searchStocksIsLoading &&
+          if (!provider.loadingSearchedStocks &&
               provider.searchedStocks.isEmpty) {
-            return _nothingFound();
+            return const NothingFoundMessage();
           }
           return SearchedStockWidget(
-            stock: provider.searchedStocks[index - stocks.length - 1],
+            stock: provider
+                .searchedStocks[index - provider.savedStocks.length - 1],
           );
         },
         separatorBuilder: (context, index) {
-          if ((index == 0 || index == stocks.length) && provider.searching) {
+          if ((index == 0 || index == provider.savedStocks.length) &&
+              provider.searching) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
-                    index == 0 && stocks.isNotEmpty
+                    index == 0 && provider.savedStocks.isNotEmpty
                         ? 'Отслеживаемые бумаги:'
                         : 'Результаты поиска:',
                     style: Theme.of(context).textTheme.bodyText1,
@@ -74,50 +71,18 @@ class _HomeBodyState extends State<HomeBody> {
     });
   }
 
-  Widget _loadingIndicator() => const SizedBox(
-        height: 200,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.black,
-            ),
-          ),
-        ),
-      );
-
-  Widget _emptyList() => SizedBox(
-        height: 500,
-        child: Center(
-          child: Text(
-            'У вас нет отслеживаемых бумаг.\nЧтобы отслеживать бумагу необходимо найти ее по поиску и добавить.',
-            style: Theme.of(context).textTheme.caption,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-
-  Widget _nothingFound() => SizedBox(
-        height: 100,
-        child: Center(
-          child: Text(
-            'По запросу «${searchController.text}» ничего не найдено',
-            style: Theme.of(context).textTheme.caption,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-
   int _countItems(StocksProvider provider, int lengthStocks) {
     //тк всегда есть поисковая строка сверху
     int count = 1;
 
-    // когда лист нет отслеживаемых акции и не идет поиск
+    // когда лист нет отслеживаемых акции и не идет поиск и не фильтруется список сохраненных акций
     // или  когда идет загрузка отслеживаемых акций
-    // добавляем один элемент либо для индиактора загрузки
+    // добавляем один элемент либо для индикатора загрузки
     // либо для текста, что список пуст
-    if (provider.stocks.isEmpty && !provider.searching ||
-        provider.savedStocksIsLoading) {
+    if (provider.savedStocks.isEmpty &&
+            !provider.searching &&
+            !provider.savesStoksIsFiltered ||
+        provider.loadingSavedStocks) {
       count++;
     } else {
       count += lengthStocks;
@@ -128,7 +93,7 @@ class _HomeBodyState extends State<HomeBody> {
     // добавляем один для текста, что ничего не найдено
     // либо для индикатора загрузки
     if (provider.searchedStocks.isEmpty && provider.searching ||
-        provider.searchStocksIsLoading) {
+        provider.loadingSearchedStocks) {
       count++;
     } else {
       count += provider.searchedStocks.length;

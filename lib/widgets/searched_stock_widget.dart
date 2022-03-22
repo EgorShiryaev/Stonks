@@ -36,7 +36,7 @@ class _SearchedStockWidgetState extends State<SearchedStockWidget> {
             ),
           ),
           !Provider.of<StocksProvider>(context, listen: false)
-                  .stocks
+                  .savedStocks
                   .any((ele) => ele.prefix == widget.stock.prefix)
               ? IconButton(
                   onPressed: _onAdd,

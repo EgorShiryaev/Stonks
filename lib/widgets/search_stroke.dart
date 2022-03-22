@@ -11,6 +11,7 @@ class SearchStroke extends StatefulWidget {
 }
 
 class _SearchStrokeState extends State<SearchStroke> {
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -24,7 +25,7 @@ class _SearchStrokeState extends State<SearchStroke> {
           suffixIcon: widget.controller.text.isNotEmpty
               ? IconButton(
                   icon: const Icon(Icons.clear, color: Colors.black),
-                  onPressed: _onClear,
+                  onPressed: _clear,
                   splashColor: Colors.white,
                 )
               : null,
@@ -53,10 +54,14 @@ class _SearchStrokeState extends State<SearchStroke> {
     if (text.isEmpty) {
       Provider.of<StocksProvider>(context, listen: false)
           .deleteSearchedStocks();
+    } else {
+      setState(() {});
+      Provider.of<StocksProvider>(context, listen: false)
+          .searchInSavedStocks(text);
     }
   }
 
-  _onClear() {
+  _clear() {
     widget.controller.clear();
     Provider.of<StocksProvider>(context, listen: false).deleteSearchedStocks();
   }

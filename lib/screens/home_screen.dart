@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: const HomeBody(),
+      body:  HomeBody(),
     );
   }
 

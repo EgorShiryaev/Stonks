@@ -12,48 +12,69 @@ class StocksProvider extends ChangeNotifier {
 
   int _nQuery = 0;
 
-  bool _savedStocksIsLoading = true;
-  bool _searchStocksIsLoading = false;
-  bool _searching = false;
-  List<Stock> _searchedStocks = [];
+  // идет ли загрузка из локального хранилища
+  bool _loadingSavedStocks = true;
+  bool get loadingSavedStocks => _loadingSavedStocks;
 
-  bool get savedStocksIsLoading => _savedStocksIsLoading;
-  bool get searchStocksIsLoading => _searchStocksIsLoading;
+  // идет ли загрузка данных через запрос поиска
+  bool _loadingSearchedStocks = false;
+  bool get loadingSearchedStocks => _loadingSearchedStocks;
+
+  // производится ли в данный момент поиск
+  bool _searching = false;
   bool get searching => _searching;
-  List<Stock> get stocks => _repository.stocks;
+
+  // данные сохраненные в листе отслеживания
+  List<Stock> _savedStocks = [];
+  List<Stock> get savedStocks => _savedStocks;
+
+  // найденные по запросу поиска данные
+  List<Stock> _searchedStocks = [];
   List<Stock> get searchedStocks => _searchedStocks;
+
+  // последние слова поиска
+  String _lastQuery = '';
+  String get lastQuery => _lastQuery;
+
+  // происходит ли фильтрация сохраненных в листе отслеживания
+  //данных с помощью поисковой строке
+  bool _savesStoksIsFiltered = false;
+  bool get savesStoksIsFiltered => _savesStoksIsFiltered;
 
   void init() async {
     await _repository.init();
-    _savedStocksIsLoading = false;
+    _savedStocks = _repository.stocks;
+    _loadingSavedStocks = false;
     notifyListeners();
     _setListnerToNewPrices();
   }
 
   void add(Stock stock) {
     _repository.add(stock);
+    _savedStocks.add(stock);
     notifyListeners();
   }
 
   void delete(String prefix) {
     _repository.delete(prefix);
-    _lastPriceService.unsubscribe(prefix);
+    _savedStocks.removeWhere((element) => element.prefix == prefix);
     notifyListeners();
   }
 
   void searchStock(String query) async {
     if (query.isNotEmpty) {
       _nQuery++;
+      _loadingSearchedStocks = true;
       _searching = true;
-      _searchStocksIsLoading = true;
       notifyListeners();
       _searchedStocks = await _searchStockService.get(query);
-      _searchStocksIsLoading = false;
+      _loadingSearchedStocks = false;
       _nQuery--;
       if (!searching) {
         _searchedStocks.clear();
       }
       if (_nQuery == 0) {
+        _lastQuery = query;
         notifyListeners();
       }
     }
@@ -66,7 +87,7 @@ class StocksProvider extends ChangeNotifier {
       if (data == null) {
         return;
       }
-      stocks.forEach((stock) {
+      savedStocks.forEach((stock) {
         final element = data.firstWhere(
           (el) => el['s'] == stock.prefix,
           orElse: () => null,
@@ -88,6 +109,20 @@ class StocksProvider extends ChangeNotifier {
   void deleteSearchedStocks() {
     _searchedStocks.clear();
     _searching = false;
+    _savedStocks = _repository.stocks;
+    _lastQuery = '';
+    _savesStoksIsFiltered = false;
+    notifyListeners();
+  }
+
+  void searchInSavedStocks(String text) {
+    final lowercaseSearchText = text.toLowerCase();
+    _savesStoksIsFiltered = true;
+    _savedStocks = _repository.stocks
+        .where((element) =>
+            element.prefix.toLowerCase().contains(lowercaseSearchText) ||
+            element.description.toLowerCase().contains(lowercaseSearchText))
+        .toList();
     notifyListeners();
   }
 

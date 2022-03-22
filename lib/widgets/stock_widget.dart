@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,22 +16,38 @@ class StockWidget extends StatefulWidget {
 }
 
 class _StockWidgetState extends State<StockWidget> {
-  bool needSubscribe = true;
+  String lastSubscribePrefix = '';
+
+  @override
+  void initState() {
+    _subscribe(widget.stock.prefix);
+    super.initState();
+  }
 
   @override
   void deactivate() {
-    Provider.of<StocksProvider>(context)
-        .unsubscribeToLastPrice(widget.stock.prefix);
-    needSubscribe = true;
+    _unsubscribe(widget.stock.prefix);
     super.deactivate();
+  }
+
+  _subscribe(String prefix) {
+    Provider.of<StocksProvider>(context, listen: false)
+        .subscribeToLastPrice(prefix);
+    lastSubscribePrefix = prefix;
+  }
+
+  _unsubscribe(String prefix) {
+    Provider.of<StocksProvider>(context, listen: false)
+        .unsubscribeToLastPrice(prefix);
+    lastSubscribePrefix = '';
   }
 
   @override
   Widget build(BuildContext context) {
-    if (needSubscribe) {
-      Provider.of<StocksProvider>(context)
-          .subscribeToLastPrice(widget.stock.prefix);
-      needSubscribe = false;
+    if (lastSubscribePrefix != widget.stock.prefix &&
+        lastSubscribePrefix.isNotEmpty) {
+      _unsubscribe(lastSubscribePrefix);
+      _subscribe(widget.stock.prefix);
     }
     return Dismissible(
       key: Key(widget.stock.prefix),
