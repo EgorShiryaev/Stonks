@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/providers/stocks_provider.dart';
@@ -24,15 +23,9 @@ class _HomeBodyState extends State<HomeBody> {
         return element.prefix.toLowerCase().contains(lowercaseSearchedText) ||
             element.description.toLowerCase().contains(lowercaseSearchedText);
       }).toList();
-      final itemCount = 1 +
-          (provider.stocks.isEmpty && !provider.searching || provider.savedStocksIsLoading ? 1 : stocks.length) +
-          (provider.searchedStocks.isEmpty && provider.searching ||
-                  provider.searchStocksIsLoading
-              ? 1
-              : provider.searchedStocks.length);
       return ListView.separated(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        itemCount: itemCount,
+        itemCount: _countItems(provider, stocks.length),
         itemBuilder: (context, index) {
           if (index == 0) {
             return SearchStroke(controller: searchController);
@@ -41,42 +34,14 @@ class _HomeBodyState extends State<HomeBody> {
             return StockWidget(stock: stocks[index - 1]);
           }
           if (provider.savedStocksIsLoading || provider.searchStocksIsLoading) {
-            return const SizedBox(
-              height: 200,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            );
+            return _loadingIndicator();
           }
           if (provider.stocks.isEmpty && !provider.searching) {
-            return SizedBox(
-              height: 500,
-              child: Center(
-                child: Text(
-                  'У вас нет отслеживаемых бумаг.\nЧтобы отслеживать бумагу необходимо найти ее по поиску и добавить.',
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+            return _emptyList();
           }
           if (!provider.searchStocksIsLoading &&
               provider.searchedStocks.isEmpty) {
-            return SizedBox(
-              height: 100,
-              child: Center(
-                child: Text(
-                  'По запросу «${searchController.text}» ничего не найдено',
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+            return _nothingFound();
           }
           return SearchedStockWidget(
             stock: provider.searchedStocks[index - stocks.length - 1],
@@ -107,5 +72,68 @@ class _HomeBodyState extends State<HomeBody> {
         padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
       );
     });
+  }
+
+  Widget _loadingIndicator() => const SizedBox(
+        height: 200,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
+
+  Widget _emptyList() => SizedBox(
+        height: 500,
+        child: Center(
+          child: Text(
+            'У вас нет отслеживаемых бумаг.\nЧтобы отслеживать бумагу необходимо найти ее по поиску и добавить.',
+            style: Theme.of(context).textTheme.caption,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+
+  Widget _nothingFound() => SizedBox(
+        height: 100,
+        child: Center(
+          child: Text(
+            'По запросу «${searchController.text}» ничего не найдено',
+            style: Theme.of(context).textTheme.caption,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+
+  int _countItems(StocksProvider provider, int lengthStocks) {
+    //тк всегда есть поисковая строка сверху
+    int count = 1;
+
+    // когда лист нет отслеживаемых акции и не идет поиск
+    // или  когда идет загрузка отслеживаемых акций
+    // добавляем один элемент либо для индиактора загрузки
+    // либо для текста, что список пуст
+    if (provider.stocks.isEmpty && !provider.searching ||
+        provider.savedStocksIsLoading) {
+      count++;
+    } else {
+      count += lengthStocks;
+    }
+
+    // когда ничего не найдено и производится поиск поиск
+    // или когда идет загрузка данных по запросу
+    // добавляем один для текста, что ничего не найдено
+    // либо для индикатора загрузки
+    if (provider.searchedStocks.isEmpty && provider.searching ||
+        provider.searchStocksIsLoading) {
+      count++;
+    } else {
+      count += provider.searchedStocks.length;
+    }
+
+    return count;
   }
 }
