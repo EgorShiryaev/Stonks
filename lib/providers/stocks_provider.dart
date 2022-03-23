@@ -62,6 +62,7 @@ class StocksProvider extends ChangeNotifier {
 
   void add(Stock stock) {
     _repository.add(stock);
+    // тк _savedStocks может указывать на _repository.stocks для исключения дублей необходима проверка
     if (!_savedStocks.any((element) => element.prefix == stock.prefix)) {
       _savedStocks.add(stock);
       _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
@@ -87,9 +88,13 @@ class StocksProvider extends ChangeNotifier {
         _searchedStocks = await _searchStockService.get(query);
         _loadingSearchedStocks = false;
         _nQuery--;
+        // если поисковая строка очищена до того как пришел ответ от сервера
+        // необходима проверка для того чтобы не отображать неактуальные данные
         if (!searching) {
           _searchedStocks.clear();
         }
+        // если посылается запрос, а на прошлый запрос ответ еще не пришел,
+        // необходима проверка, чтобы отображать данные по последнему запросу
         if (_nQuery == 0) {
           _lastQuery = query;
           notifyListeners();
@@ -107,6 +112,7 @@ class StocksProvider extends ChangeNotifier {
     }
   }
 
+  // установка прослушивателя на обновление цены
   void _setListenerToNewPrices() {
     _lastPriceService.stream.listen((event) {
       bool priceIsChange = false;
@@ -133,7 +139,7 @@ class StocksProvider extends ChangeNotifier {
     });
   }
 
-  void deleteSearchedStocks() {
+  void clearSearchStroke() {
     _searchedStocks.clear();
     _searching = false;
     _savedStocks = _repository.stocks;
