@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/providers/stocks_provider.dart';
@@ -10,7 +11,6 @@ import 'package:stonks/widgets/stock_widget.dart';
 
 class HomeBody extends StatelessWidget {
   HomeBody({Key? key}) : super(key: key);
-
   final searchController = TextEditingController();
 
   @override
@@ -29,11 +29,42 @@ class HomeBody extends StatelessWidget {
             return StockWidget(stock: provider.savedStocks[index - 1]);
           }
           if (provider.loadingSavedStocks || provider.loadingSearchedStocks) {
-            return const LoadingIndicator();
+            final double height = provider.loadingSavedStocks
+                ? MediaQuery.of(context).size.height - 250
+                : 200;
+            return LoadingIndicator(height: height);
           }
-          if (provider.savedStocks.isEmpty && !provider.searching) {
+          if (provider.savedStocks.isEmpty &&
+              !provider.searching &&
+              !(provider.errorIsConnectNetwork ||
+                  provider.errorIsServerFailure)) {
             return const EmptySavedStocksList();
           }
+          if (provider.errorIsConnectNetwork) {
+            return SizedBox(
+              height: 300,
+              child: Center(
+                child: Text(
+                  'Произошла ошибка подключения к интернету.\n Проверьте подключение к интернету и попробуйте еще раз произвести поиск.',
+                  style: Theme.of(context).textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+          if (provider.errorIsServerFailure) {
+            return SizedBox(
+              height: 300,
+              child: Center(
+                child: Text(
+                  'Произошла ошибка подключения данных.\n Попробуйте еще раз произвести поиск позднее.',
+                  style: Theme.of(context).textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
           if (!provider.loadingSearchedStocks &&
               provider.searchedStocks.isEmpty) {
             return const NothingFoundMessage();
@@ -82,7 +113,7 @@ class HomeBody extends StatelessWidget {
     if (provider.savedStocks.isEmpty &&
             !provider.searching &&
             !provider.savesStoksIsFiltered ||
-        provider.loadingSavedStocks) {
+        provider.loadingSavedStocks ) {
       count++;
     } else {
       count += lengthStocks;
@@ -90,10 +121,13 @@ class HomeBody extends StatelessWidget {
 
     // когда ничего не найдено и производится поиск поиск
     // или когда идет загрузка данных по запросу
+    // или когда происходит ошибка во время запроса
     // добавляем один для текста, что ничего не найдено
     // либо для индикатора загрузки
     if (provider.searchedStocks.isEmpty && provider.searching ||
-        provider.loadingSearchedStocks) {
+        provider.loadingSearchedStocks ||
+        ((provider.errorIsConnectNetwork || provider.errorIsServerFailure) &&
+            provider.searching)) {
       count++;
     } else {
       count += provider.searchedStocks.length;

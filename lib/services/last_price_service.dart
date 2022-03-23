@@ -4,7 +4,7 @@ import 'package:stonks/settings.dart';
 import 'package:web_socket_channel/io.dart';
 
 class LastPriceService {
-  final _channel = IOWebSocketChannel.connect(SETTINGS.websocketUrl);
+  final  _channel =IOWebSocketChannel.connect(SETTINGS.websocketUrl);
 
   final _subscribeMap = <String, int>{};
 
@@ -30,7 +30,7 @@ class LastPriceService {
             .add(json.encode({'type': 'unsubscribe', 'symbol': prefix}));
         _subscribeMap.remove(prefix);
       } else {
-        _subscribeMap.update(prefix, (value) => value-1);
+        _subscribeMap.update(prefix, (value) => value - 1);
       }
     }
     log('Subscribes: $_subscribeMap');

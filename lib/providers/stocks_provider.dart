@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:stonks/errors/exceptions.dart';
 import 'package:stonks/repositories/stocks_repository.dart';
 import 'package:stonks/services/search_stock_service.dart';
 import '../models/stock.dart';
@@ -37,9 +39,17 @@ class StocksProvider extends ChangeNotifier {
   String get lastQuery => _lastQuery;
 
   // происходит ли фильтрация сохраненных в листе отслеживания
-  //данных с помощью поисковой строке
+  // данных с помощью поисковой строке
   bool _savesStoksIsFiltered = false;
   bool get savesStoksIsFiltered => _savesStoksIsFiltered;
+
+  // флаг ошибки подключения к интернету
+  bool _errorIsInternetConnection = false;
+  bool get errorIsConnectNetwork => _errorIsInternetConnection;
+
+  // флаг ошибки сервера
+  bool _errorIsServerFailure = false;
+  bool get errorIsServerFailure => _errorIsServerFailure;
 
   void init() async {
     await _repository.init();
@@ -50,8 +60,9 @@ class StocksProvider extends ChangeNotifier {
   }
 
   void add(Stock stock) {
-    _repository.add(stock);
     _savedStocks.add(stock);
+    _repository.add(stock);
+    _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
     notifyListeners();
   }
 
@@ -62,21 +73,34 @@ class StocksProvider extends ChangeNotifier {
   }
 
   void searchStock(String query) async {
-    if (query.isNotEmpty) {
-      _nQuery++;
-      _loadingSearchedStocks = true;
-      _searching = true;
-      notifyListeners();
-      _searchedStocks = await _searchStockService.get(query);
-      _loadingSearchedStocks = false;
-      _nQuery--;
-      if (!searching) {
-        _searchedStocks.clear();
-      }
-      if (_nQuery == 0) {
-        _lastQuery = query;
+    try {
+      if (query.isNotEmpty) {
+        _errorIsServerFailure = false;
+        _errorIsInternetConnection = false;
+        _nQuery++;
+        _loadingSearchedStocks = true;
+        _searching = true;
         notifyListeners();
+        _searchedStocks = await _searchStockService.get(query);
+        _loadingSearchedStocks = false;
+        _nQuery--;
+        if (!searching) {
+          _searchedStocks.clear();
+        }
+        if (_nQuery == 0) {
+          _lastQuery = query;
+          notifyListeners();
+        }
       }
+    } on InternetConnectionException {
+      _loadingSearchedStocks = false;
+      _errorIsInternetConnection = true;
+      notifyListeners();
+    } catch (e) {
+      log('error: $e');
+      _loadingSearchedStocks = false;
+      _errorIsServerFailure = true;
+      notifyListeners();
     }
   }
 
@@ -87,7 +111,7 @@ class StocksProvider extends ChangeNotifier {
       if (data == null) {
         return;
       }
-      savedStocks.forEach((stock) {
+      for (var stock in savedStocks) {
         final element = data.firstWhere(
           (el) => el['s'] == stock.prefix,
           orElse: () => null,
@@ -99,7 +123,7 @@ class StocksProvider extends ChangeNotifier {
             _repository.update(stock, newPrice);
           }
         }
-      });
+      }
       if (priceIsChange) {
         notifyListeners();
       }
