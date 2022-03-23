@@ -48,7 +48,3 @@ app.*.map.json
 # Версии проекта для web и windows
 /web
 /windows
-
-# Файл с API-KEY
-settings.json
-lib/settings.dart

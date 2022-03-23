@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmptySavedStocksList extends StatelessWidget {
-  const EmptySavedStocksList({Key? key}) : super(key: key);
+class EmptySavedStocksView extends StatelessWidget {
+  const EmptySavedStocksView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

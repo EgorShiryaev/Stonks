@@ -5,15 +5,15 @@ import 'package:stonks/widgets/snack_bar_content.dart';
 import '../models/stock.dart';
 import '../providers/stocks_provider.dart';
 
-class StockWidget extends StatefulWidget {
+class SavedStockWidget extends StatefulWidget {
   final Stock stock;
-  const StockWidget({Key? key, required this.stock}) : super(key: key);
+  const SavedStockWidget({Key? key, required this.stock}) : super(key: key);
 
   @override
-  State<StockWidget> createState() => _StockWidgetState();
+  State<SavedStockWidget> createState() => _SavedStockWidgetState();
 }
 
-class _StockWidgetState extends State<StockWidget> {
+class _SavedStockWidgetState extends State<SavedStockWidget> {
   String lastSubscribePrefix = '';
 
   @override
@@ -40,13 +40,17 @@ class _StockWidgetState extends State<StockWidget> {
     lastSubscribePrefix = '';
   }
 
-  @override
-  Widget build(BuildContext context) {
+  _checkCurrentStockIsSubscribe() {
     if (lastSubscribePrefix != widget.stock.prefix &&
         lastSubscribePrefix.isNotEmpty) {
       _unsubscribe(lastSubscribePrefix);
       _subscribe(widget.stock.prefix);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _checkCurrentStockIsSubscribe();
     return Dismissible(
       key: Key(widget.stock.prefix),
       direction: DismissDirection.endToStart,
@@ -82,7 +86,7 @@ class _StockWidgetState extends State<StockWidget> {
             ),
             widget.stock.lastPrice != 0
                 ? Text(
-                    '${(widget.stock.lastPrice).toStringAsFixed(2)} \$',
+                    widget.stock.lastPrice.toStringAsFixed(2) + ' \$',
                     style: Theme.of(context).textTheme.subtitle2,
                   )
                 : const Icon(Icons.av_timer),
@@ -96,7 +100,7 @@ class _StockWidgetState extends State<StockWidget> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: SnackBarContent(stock: widget.stock),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
       ),
     );
     Provider.of<StocksProvider>(context, listen: false)

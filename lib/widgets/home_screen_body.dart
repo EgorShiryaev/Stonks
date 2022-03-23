@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/providers/stocks_provider.dart';
-import 'package:stonks/widgets/empty_saved_stocks_list.dart';
-import 'package:stonks/widgets/loading_indicator.dart';
-import 'package:stonks/widgets/nothing_found_message.dart';
+import 'package:stonks/widgets/empty_saved_stocks_view.dart';
+import 'package:stonks/widgets/loading_indicator_view.dart';
+import 'package:stonks/widgets/nothing_found_view.dart';
 import 'package:stonks/widgets/search_stroke.dart';
 import 'package:stonks/widgets/searched_stock_widget.dart';
+import 'package:stonks/widgets/server_error_view.dart';
 import 'package:stonks/widgets/stock_widget.dart';
 
-class HomeBody extends StatelessWidget {
-  HomeBody({Key? key}) : super(key: key);
+class HomeScreenBody extends StatelessWidget {
+  HomeScreenBody({Key? key}) : super(key: key);
   final searchController = TextEditingController();
 
   @override
@@ -26,48 +26,37 @@ class HomeBody extends StatelessWidget {
             return SearchStroke(controller: searchController);
           }
           if (index > 0 && index <= provider.savedStocks.length) {
-            return StockWidget(stock: provider.savedStocks[index - 1]);
+            return SavedStockWidget(stock: provider.savedStocks[index - 1]);
           }
-          if (provider.loadingSavedStocks || provider.loadingSearchedStocks) {
-            final double height = provider.loadingSavedStocks
-                ? MediaQuery.of(context).size.height - 250
-                : 200;
-            return LoadingIndicator(height: height);
+          if (provider.loadingSavedStocks) {
+            return LoadingIndicatorView(
+              height: MediaQuery.of(context).size.height - 250,
+            );
+          }
+          if (provider.loadingSearchedStocks) {
+            return const LoadingIndicatorView(height: 200);
           }
           if (provider.savedStocks.isEmpty &&
               !provider.searching &&
               !(provider.errorIsConnectNetwork ||
                   provider.errorIsServerFailure)) {
-            return const EmptySavedStocksList();
+            return const EmptySavedStocksView();
           }
           if (provider.errorIsConnectNetwork) {
-            return SizedBox(
-              height: 300,
-              child: Center(
-                child: Text(
+            return const ErrorView(
+              text:
                   'Произошла ошибка подключения к интернету.\n Проверьте подключение к интернету и попробуйте еще раз произвести поиск.',
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
             );
           }
           if (provider.errorIsServerFailure) {
-            return SizedBox(
-              height: 300,
-              child: Center(
-                child: Text(
+            return const ErrorView(
+              text:
                   'Произошла ошибка подключения данных.\n Попробуйте еще раз произвести поиск позднее.',
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
             );
           }
-
           if (!provider.loadingSearchedStocks &&
               provider.searchedStocks.isEmpty) {
-            return const NothingFoundMessage();
+            return const NothingFoundView();
           }
           return SearchedStockWidget(
             stock: provider
@@ -106,28 +95,29 @@ class HomeBody extends StatelessWidget {
     //тк всегда есть поисковая строка сверху
     int count = 1;
 
-    // когда лист нет отслеживаемых акции и не идет поиск и не фильтруется список сохраненных акций
-    // или  когда идет загрузка отслеживаемых акций
-    // добавляем один элемент либо для индикатора загрузки
-    // либо для текста, что список пуст
-    if (provider.savedStocks.isEmpty &&
-            !provider.searching &&
-            !provider.savesStoksIsFiltered ||
-        provider.loadingSavedStocks ) {
+    // когда в листе нет отслеживаемых акции, не идет поиск и не фильтруется список сохраненных акций
+    bool showEmptySavedStocksView = provider.savedStocks.isEmpty &&
+        !provider.searching &&
+        !provider.savesStoksIsFiltered;
+
+    if (showEmptySavedStocksView || provider.loadingSavedStocks) {
       count++;
     } else {
       count += lengthStocks;
     }
 
-    // когда ничего не найдено и производится поиск поиск
-    // или когда идет загрузка данных по запросу
-    // или когда происходит ошибка во время запроса
-    // добавляем один для текста, что ничего не найдено
-    // либо для индикатора загрузки
-    if (provider.searchedStocks.isEmpty && provider.searching ||
+    // когда данные поиска пустые и идет поиск
+    bool showNothingFoundView =
+        provider.searchedStocks.isEmpty && provider.searching;
+
+    // когда возникла какая-либо ошибка и идет поиск
+    bool showErrorView =
+        (provider.errorIsConnectNetwork || provider.errorIsServerFailure) &&
+            provider.searching;
+
+    if (showNothingFoundView ||
         provider.loadingSearchedStocks ||
-        ((provider.errorIsConnectNetwork || provider.errorIsServerFailure) &&
-            provider.searching)) {
+        showErrorView) {
       count++;
     } else {
       count += provider.searchedStocks.length;

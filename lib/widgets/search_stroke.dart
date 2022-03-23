@@ -11,10 +11,12 @@ class SearchStroke extends StatefulWidget {
 }
 
 class _SearchStrokeState extends State<SearchStroke> {
+  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextField(
+        focusNode: _focusNode,
         decoration: InputDecoration(
           prefixIcon: IconButton(
             icon: const Icon(Icons.search_rounded, color: Colors.black),
@@ -47,8 +49,13 @@ class _SearchStrokeState extends State<SearchStroke> {
     );
   }
 
-  _onSearch() => Provider.of<StocksProvider>(context, listen: false)
-      .searchStock(widget.controller.text);
+  _onSearch() {
+    FocusScope.of(context).unfocus();
+    if (widget.controller.text.isNotEmpty) {
+      Provider.of<StocksProvider>(context, listen: false)
+          .searchStock(widget.controller.text);
+    }
+  }
 
   _onChanged(String text) {
     if (text.isEmpty) {
@@ -64,5 +71,10 @@ class _SearchStrokeState extends State<SearchStroke> {
   _clear() {
     widget.controller.clear();
     Provider.of<StocksProvider>(context, listen: false).deleteSearchedStocks();
+    if (_focusNode.hasFocus) {
+      FocusScope.of(context).unfocus();
+    } else {
+      FocusScope.of(context).requestFocus(_focusNode);
+    }
   }
 }

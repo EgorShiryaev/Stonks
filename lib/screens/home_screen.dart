@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stonks/errors/network_info.dart';
-import '../widgets/current_date.dart';
-import '../widgets/home_body.dart';
+import 'package:stonks/widgets/connect_checker_text.dart';
+import 'package:stonks/widgets/internet_not_connected_view.dart';
+import '../widgets/current_date_view.dart';
+import '../widgets/home_screen_body.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,36 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Stonks', style: Theme.of(context).textTheme.subtitle1),
-            const CurrentDate(),
+            const CurrentDateView(),
           ],
         ),
       ),
       body: isLoading
-          ? Center(
-              child: Text(
-                'Проверка подключения к интернету...',
-                style: Theme.of(context).textTheme.caption,
-                textAlign: TextAlign.center,
-              ),
-            )
+          ? const ConnectCheckerText()
           : internetIsConnected
-              ? HomeBody()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Нет подключения к интернету. Проверьте подключение и обновите страницу',
-                      style: Theme.of(context).textTheme.caption,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    IconButton(
-                      onPressed: _onRefresh,
-                      icon: const Icon(Icons.refresh),
-                      iconSize: 50,
-                    )
-                  ],
-                ),
+              ? HomeScreenBody()
+              : InternetNotConnectedView(onRefresh: _onRefresh),
     );
   }
 

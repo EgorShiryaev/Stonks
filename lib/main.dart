@@ -21,10 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Stonks',
       theme: AppTheme().light,
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => StocksProvider()..init()),
-        ],
+      home: ChangeNotifierProvider(
+        create: (context) => StocksProvider()..init(),
         child: const HomeScreen(),
       ),
     );

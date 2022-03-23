@@ -4,23 +4,18 @@ import 'package:stonks/providers/stocks_provider.dart';
 
 import '../models/stock.dart';
 
-class SnackBarContent extends StatefulWidget {
+class SnackBarContent extends StatelessWidget {
   final Stock stock;
   const SnackBarContent({Key? key, required this.stock}) : super(key: key);
 
-  @override
-  State<SnackBarContent> createState() => _SnackBarContentState();
-}
-
-class _SnackBarContentState extends State<SnackBarContent> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('${widget.stock.prefix} удалён'),
+        Text('${stock.prefix} удалён'),
         IconButton(
-          onPressed: _onUndo,
+          onPressed: () => _onUndo(context),
           icon: const Icon(
             Icons.undo,
             color: Colors.white,
@@ -30,8 +25,8 @@ class _SnackBarContentState extends State<SnackBarContent> {
     );
   }
 
-  _onUndo() {
-    Provider.of<StocksProvider>(context, listen: false).add(widget.stock);
+  _onUndo(BuildContext context) {
+    Provider.of<StocksProvider>(context, listen: false).add(stock);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 }
