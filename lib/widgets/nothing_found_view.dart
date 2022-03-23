@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/stocks_provider.dart';
 
-class NothingFoundMessage extends StatelessWidget {
-  const NothingFoundMessage({Key? key}) : super(key: key);
+class NothingFoundView extends StatelessWidget {
+  const NothingFoundView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

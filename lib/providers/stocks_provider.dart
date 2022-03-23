@@ -12,6 +12,7 @@ class StocksProvider extends ChangeNotifier {
   final _lastPriceService = LastPriceService();
   final _searchStockService = SearchStockService();
 
+  // кол-во активных запросов
   int _nQuery = 0;
 
   // идет ли загрузка из локального хранилища
@@ -56,13 +57,15 @@ class StocksProvider extends ChangeNotifier {
     _savedStocks = _repository.stocks;
     _loadingSavedStocks = false;
     notifyListeners();
-    _setListnerToNewPrices();
+    _setListenerToNewPrices();
   }
 
   void add(Stock stock) {
-    _savedStocks.add(stock);
     _repository.add(stock);
-    _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
+    if (!_savedStocks.any((element) => element.prefix == stock.prefix)) {
+      _savedStocks.add(stock);
+      _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
+    }
     notifyListeners();
   }
 
@@ -104,7 +107,7 @@ class StocksProvider extends ChangeNotifier {
     }
   }
 
-  void _setListnerToNewPrices() {
+  void _setListenerToNewPrices() {
     _lastPriceService.stream.listen((event) {
       bool priceIsChange = false;
       final List? data = json.decode(event)['data'];

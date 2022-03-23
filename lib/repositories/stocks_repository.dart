@@ -17,7 +17,9 @@ class StocksRepository {
     await _stocksLocalDataSource.init();
     await _appInfoLocalDataSource.init();
     if (await _appInfoLocalDataSource.getFirstRun()) {
-      _addFirstRunStock();
+      for (var element in firstRunStocks) {
+        add(element);
+      }
       _appInfoLocalDataSource.setFirstRunIsFalse();
       log('First run application: add Apple, Google, Amazon, Microsoft and BitCoin Binance');
     } else {
@@ -26,15 +28,11 @@ class StocksRepository {
     }
   }
 
-  _addFirstRunStock() => firstRunStocks.map((element) => add(element));
-
   add(Stock stock) {
-    if (!_stocks.any((element) => element.prefix == stock.prefix)) {
-      _stocks.add(stock);
-      _stocks.sort((a, b) => a.prefix.compareTo(b.prefix));
-      _stocksLocalDataSource.add(stock);
-      log('Add new stock: ${stock.prefix}');
-    }
+    _stocks.add(stock);
+    _stocks.sort((a, b) => a.prefix.compareTo(b.prefix));
+    _stocksLocalDataSource.add(stock);
+    log('Add new stock: ${stock.prefix}');
   }
 
   update(Stock stock, String price) {

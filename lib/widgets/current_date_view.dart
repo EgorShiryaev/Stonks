@@ -2,14 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CurrentDate extends StatefulWidget {
-  const CurrentDate({Key? key}) : super(key: key);
+class CurrentDateView extends StatefulWidget {
+  const CurrentDateView({Key? key}) : super(key: key);
 
   @override
-  State<CurrentDate> createState() => _CurrentDateState();
+  State<CurrentDateView> createState() => _CurrentDateViewState();
 }
 
-class _CurrentDateState extends State<CurrentDate> {
+class _CurrentDateViewState extends State<CurrentDateView> {
   DateTime dateNow = DateTime.now();
   Timer? timer;
 
