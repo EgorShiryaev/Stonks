@@ -54,23 +54,22 @@ class _SearchStrokeState extends State<SearchStroke> {
     if (widget.controller.text.isNotEmpty) {
       Provider.of<StocksProvider>(context, listen: false)
           .searchStock(widget.controller.text);
+      Provider.of<StocksProvider>(context, listen: false)
+          .searchInSavedStocks(widget.controller.text);
     }
   }
 
   _onChanged(String text) {
     if (text.isEmpty) {
-      Provider.of<StocksProvider>(context, listen: false)
-          .deleteSearchedStocks();
+      Provider.of<StocksProvider>(context, listen: false).clearSearchStroke();
     } else {
       setState(() {});
-      Provider.of<StocksProvider>(context, listen: false)
-          .searchInSavedStocks(text);
     }
   }
 
   _clear() {
     widget.controller.clear();
-    Provider.of<StocksProvider>(context, listen: false).deleteSearchedStocks();
+    Provider.of<StocksProvider>(context, listen: false).clearSearchStroke();
     if (_focusNode.hasFocus) {
       FocusScope.of(context).unfocus();
     } else {

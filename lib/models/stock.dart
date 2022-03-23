@@ -16,8 +16,6 @@ class Stock {
     required this.description,
   });
 
-  updateLastPrice(String newPrice) => lastPrice = double.parse(newPrice);
-
   factory Stock.fromSearchService(Map<String, dynamic> json) {
     return Stock(
       prefix: json['symbol'],
@@ -25,4 +23,6 @@ class Stock {
       description: json['description'],
     );
   }
+  
+  updateLastPrice(String newPrice) => lastPrice = double.parse(newPrice);
 }
