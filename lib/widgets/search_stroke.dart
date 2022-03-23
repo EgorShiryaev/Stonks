@@ -11,7 +11,6 @@ class SearchStroke extends StatefulWidget {
 }
 
 class _SearchStrokeState extends State<SearchStroke> {
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -43,6 +42,7 @@ class _SearchStrokeState extends State<SearchStroke> {
         style: Theme.of(context).textTheme.caption,
         cursorColor: Colors.black12,
         onChanged: _onChanged,
+        onEditingComplete: _onSearch,
       ),
     );
   }

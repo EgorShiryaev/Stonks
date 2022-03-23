@@ -60,9 +60,11 @@ class StocksProvider extends ChangeNotifier {
   }
 
   void add(Stock stock) {
-    _savedStocks.add(stock);
     _repository.add(stock);
-    _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
+    if (!_savedStocks.any((element) => element.prefix == stock.prefix)) {
+      _savedStocks.add(stock);
+      _savedStocks.sort((a, b) => a.prefix.compareTo(b.prefix));
+    }
     notifyListeners();
   }
 
