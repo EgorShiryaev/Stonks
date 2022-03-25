@@ -1,13 +1,14 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:stonks/settings.dart';
 
 class AppInfoLocalDataSource {
-  final _url = 'app_info';
-
   init() async {
-    await Hive.openBox(_url);
+    await Hive.openBox(SETTINGS.appInfoLocalDataSourceUrl);
   }
 
-  getFirstRun() => Hive.box(_url).get('first_run', defaultValue: true);
+  getFirstRun() => Hive.box(SETTINGS.appInfoLocalDataSourceUrl)
+      .get('first_run', defaultValue: true);
 
-  setFirstRunIsFalse() => Hive.box(_url).put('first_run', false);
+  setFirstRunIsFalse() =>
+      Hive.box(SETTINGS.appInfoLocalDataSourceUrl).put('first_run', false);
 }

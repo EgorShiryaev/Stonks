@@ -1,23 +1,28 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:stonks/settings.dart';
 import '../models/stock.dart';
 
 class StocksLocalDataSources {
-  final _url = 'box_for_stocks';
-
   init() async {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(StockAdapter());
     }
-    await Hive.openBox<Stock>(_url);
+    await Hive.openBox<Stock>(SETTINGS.stocksLocalDataSourcesUrl);
   }
 
-  List<Stock> get() => Hive.box<Stock>(_url).values.toList();
+  List<Stock> get() =>
+      Hive.box<Stock>(SETTINGS.stocksLocalDataSourcesUrl).values.toList();
 
-  void add(Stock stock) => Hive.box<Stock>(_url).put(stock.prefix, stock);
+  void add(Stock stock) => Hive.box<Stock>(SETTINGS.stocksLocalDataSourcesUrl)
+      .put(stock.prefix, stock);
 
-  void update(Stock stock) => Hive.box<Stock>(_url).put(stock.prefix, stock);
+  void update(Stock stock) =>
+      Hive.box<Stock>(SETTINGS.stocksLocalDataSourcesUrl)
+          .put(stock.prefix, stock);
 
-  void delete(String prefix) => Hive.box<Stock>(_url).delete(prefix);
+  void delete(String prefix) =>
+      Hive.box<Stock>(SETTINGS.stocksLocalDataSourcesUrl).delete(prefix);
 
-  dispose() async => await Hive.box<Stock>(_url).close();
+  dispose() async =>
+      await Hive.box<Stock>(SETTINGS.stocksLocalDataSourcesUrl).close();
 }
