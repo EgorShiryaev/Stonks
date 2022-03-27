@@ -51,7 +51,7 @@ class HomeScreenBody extends StatelessWidget {
           if (provider.errorIsServerFailure) {
             return const ErrorView(
               text:
-                  'Произошла ошибка подключения данных.\n Попробуйте еще раз произвести поиск позднее.',
+                  'Произошла ошибка получения данных.\n Попробуйте еще раз произвести поиск позднее.',
             );
           }
           if (!provider.loadingSearchedStocks &&
