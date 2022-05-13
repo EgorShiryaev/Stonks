@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
+import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
 import 'package:stonks/presentation/widgets/snack_bar_content.dart';
 
 class FollowStockWidget extends StatefulWidget {
@@ -30,14 +32,14 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
   }
 
   _subscribe(String prefix) {
-    Provider.of<StocksProvider>(context, listen: false)
-        .subscribeToLastPrice(prefix);
+    // Provider.of<StocksProvider>(context, listen: false)
+    //     .subscribeToLastPrice(prefix);
     lastSubscribeTicker = prefix;
   }
 
   _unsubscribe(String prefix) {
-    Provider.of<StocksProvider>(context, listen: false)
-        .unsubscribeToLastPrice(prefix);
+    // Provider.of<StocksProvider>(context, listen: false)
+    //     .unsubscribeToLastPrice(prefix);
     lastSubscribeTicker = '';
   }
 
@@ -111,7 +113,6 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
         duration: const Duration(seconds: 2),
       ),
     );
-    Provider.of<StocksProvider>(context, listen: false)
-        .delete(widget.stock.ticker);
+    BlocProvider.of<FollowStockCubit>(context).deleteStock(widget.stock);
   }
 }

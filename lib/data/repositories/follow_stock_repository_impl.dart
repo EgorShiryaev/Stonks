@@ -1,12 +1,11 @@
 import 'package:stonks/data/datasources/follow_stock_datasource.dart';
-import 'package:stonks/data/datasources/follow_stock_local_datasource.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
 import 'package:stonks/domain/repositories/follow_stock_repository.dart';
 
 class FollowStockRepositoryImpl implements FollowStockRepository {
   final FollowStockDatasource _datasource;
 
-  FollowStockRepositoryImpl({required FollowStockLocalDatasource datasource})
+  FollowStockRepositoryImpl({required FollowStockDatasource datasource})
       : _datasource = datasource;
 
   @override

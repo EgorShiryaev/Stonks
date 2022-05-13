@@ -19,26 +19,38 @@ import 'package:http/http.dart' as http;
 final getIt = GetIt.instance;
 
 void setupDependency() {
-  getIt.registerLazySingleton(() => ExceptionConvector());
+  getIt.registerLazySingleton<ExceptionConvector>(() => ExceptionConvector());
 
-  getIt.registerFactory(() => FollowStockCubit(useCases: getIt()));
-  getIt.registerLazySingleton(
-    () => FollowStockUseCases(repository: getIt(), exceptionConvector: getIt()),
+  // Follow stock
+  getIt.registerFactory<FollowStockCubit>(
+    () => FollowStockCubit(useCases: getIt()),
+  );
+  getIt.registerLazySingleton<FollowStockUseCases>(
+    () => FollowStockUseCases(
+      repository: getIt(),
+      exceptionConvector: getIt(),
+    ),
   );
   getIt.registerLazySingleton<FollowStockRepository>(
     () => FollowStockRepositoryImpl(datasource: getIt()),
   );
   getIt.registerLazySingleton<FollowStockDatasource>(
-    () => FollowStockLocalDatasource()..init(),
+    () => FollowStockLocalDatasource(),
   );
 
-  getIt.registerFactory(() => SearchStockCubit(useCases: getIt()));
-  getIt.registerLazySingleton(
-    () => SearchStockUseCases(repository: getIt(), exceptionConvector: getIt()),
+  // Search stock
+  getIt.registerFactory<SearchStockCubit>(
+      () => SearchStockCubit(useCases: getIt()));
+  getIt.registerLazySingleton<SearchStockUseCases>(
+    () => SearchStockUseCases(
+      repository: getIt(),
+      exceptionConvector: getIt(),
+    ),
   );
   getIt.registerLazySingleton<SearchStockRepository>(
     () => SearchStockRepositoryImpl(datasource: getIt()),
   );
+
   getIt.registerLazySingleton<SearchStockDatasource>(
     () => SearchStockRemoteDatasource(
       client: http.Client(),

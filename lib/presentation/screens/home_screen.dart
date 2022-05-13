@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stonks/presentation/screens/follow_stocks_screen.dart';
 import 'package:stonks/presentation/widgets/stonks_app_bar_content.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 const pages = [
-  Center(child: Text('FOLLOWED STONKS')),
+  FollowStocksScreen(),
   Center(child: Text('SEARCH STONK')),
 ];
 

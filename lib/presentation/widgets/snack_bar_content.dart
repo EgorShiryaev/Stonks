@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
 import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
@@ -25,7 +26,7 @@ class SnackBarContent extends StatelessWidget {
   }
 
   _onUndo(BuildContext context) {
-    Provider.of<FollowStockCubit>(context).addStock(stock);
+    BlocProvider.of<FollowStockCubit>(context).addStock(stock);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 }
