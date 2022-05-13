@@ -1,6 +1,3 @@
-import 'package:stonks/datasources/app_info_local_datasource.dart';
-import 'package:stonks/datasources/stocks_local_datasources.dart';
-
 class SETTINGS {
   static const _token = 'c8n2dviad3id1m4i8emg';
   static const _sandboxToken = 'sandbox_c8n2dviad3id1m4i8en0';
