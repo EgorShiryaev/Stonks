@@ -21,15 +21,21 @@ class SearchStockRemoteDatasource implements SearchStockDatasource {
 
   @override
   Future<List<StockEntity>> search(String searchText) async {
-    if (await _connectivity.checkConnectivity() ==
-        ConnectivityResult.ethernet) {
+    final connect = await _connectivity.checkConnectivity();
+    if (connect == ConnectivityResult.wifi ||
+        connect == ConnectivityResult.ethernet ||
+        connect == ConnectivityResult.mobile) {
       final response =
           await _client.get(SETTINGS.getUrl('/search?q=$searchText'));
-          
+
       if (response.statusCode == 200) {
-        final List<Map<String, dynamic>> stocks =
+        final List<dynamic> stocks =
             json.decode(response.body)['result'];
-        return stocks.map((stock) => StockModel.fromSearch(stock),).toList();
+        return stocks
+            .map(
+              (stock) => StockModel.fromSearch(stock),
+            )
+            .toList();
       } else {
         throw ServerException();
       }

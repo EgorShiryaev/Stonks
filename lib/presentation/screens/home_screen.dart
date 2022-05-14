@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stonks/presentation/screens/follow_stocks_screen.dart';
+import 'package:stonks/presentation/screens/search_stocks_screen.dart';
 import 'package:stonks/presentation/widgets/stonks_app_bar_content.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,13 +10,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-const pages = [
-  FollowStocksScreen(),
-  Center(child: Text('SEARCH STONK')),
-];
-
 class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
+  final pages = [
+    const FollowStocksScreen(),
+    const SearchStocksScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {

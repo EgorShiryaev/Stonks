@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
 
 class SearchStroke extends StatefulWidget {
+  final void Function(String text) search;
+  final void Function() clear;
+
   const SearchStroke({
     Key? key,
+    required this.search,
+    required this.clear,
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class _SearchStrokeState extends State<SearchStroke> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0).copyWith(top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: TextField(
         focusNode: _focusNode,
         decoration: InputDecoration(
@@ -48,17 +50,19 @@ class _SearchStrokeState extends State<SearchStroke> {
     );
   }
 
-  _onChanged(String text) {
-    BlocProvider.of<FollowStockCubit>(context).searchStocks(controller.text);
+  void _onChanged(String text) {
+    setState(() {});
+    if (text.isEmpty) {
+      return widget.clear();
+    }
+    return widget.search(text);
   }
 
   _clear() {
     controller.clear();
-    _onChanged('');
+    _onChanged(controller.text);
     if (_focusNode.hasFocus) {
       FocusScope.of(context).unfocus();
-    } else {
-      FocusScope.of(context).requestFocus(_focusNode);
     }
   }
 }

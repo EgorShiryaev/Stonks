@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
 import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
 
@@ -13,7 +12,7 @@ class SnackBarContent extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('${stock.ticker} удалён'),
+        Text('${stock.ticker} удалён из раздела "Мои акции"'),
         IconButton(
           onPressed: () => _onUndo(context),
           icon: const Icon(

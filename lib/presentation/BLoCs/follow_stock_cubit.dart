@@ -8,7 +8,7 @@ class FollowStockCubit extends Cubit<FollowStockState> {
 
   FollowStockCubit({required FollowStockUseCases useCases})
       : _useCases = useCases,
-        super(FollowStockEmptyState());
+        super(FollowStockInitialState());
 
   void loadFollowedStocks() async {
     emit(FollowStockLoadingState());
@@ -25,7 +25,7 @@ class FollowStockCubit extends Cubit<FollowStockState> {
 
     final result = await _useCases.searchInFollowed(searchText);
     emit(result.fold<FollowStockState>(
-      (l) => FollowStockSearchedState(stocks: l),
+      (l) => FollowStockSearchedState(stocks: l, searchText: searchText),
       (r) => FollowStockErrorState(message: r),
     ));
   }

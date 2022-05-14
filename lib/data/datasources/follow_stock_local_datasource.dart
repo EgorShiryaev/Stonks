@@ -35,26 +35,40 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  void add(StockEntity stock) =>
+  void add(StockEntity stock) {
+    try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
-          .put(stock.ticker, stock)
-          .catchError((_) => throw AddStockException(ticker: stock.ticker));
+          .put(stock.ticker, stock);
+    } catch (e) {
+      throw AddStockException(ticker: stock.ticker);
+    }
+  }
 
   @override
-  void update(StockEntity stock) =>
+  void update(StockEntity stock) {
+    try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
-          .put(stock.ticker, stock)
-          .catchError(
-              (_) => throw UpdateStockPriceException(ticker: stock.ticker));
+          .put(stock.ticker, stock);
+    } catch (e) {
+      throw UpdateStockPriceException(ticker: stock.ticker);
+    }
+  }
 
   @override
-  void delete(StockEntity stock) =>
+  void delete(StockEntity stock) {
+    try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
-          .delete(stock.ticker)
-          .catchError((_) => throw DeleteStockException(ticker: stock.ticker));
+          .delete(stock.ticker);
+    } catch (e) {
+      throw DeleteStockException(ticker: stock.ticker);
+    }
+  }
 
-  Future<void> dispose() async =>
-      await Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
-          .close()
-          .catchError((_) => throw DatabaseException());
+  Future<void> dispose() async {
+    try {
+      await Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId).close();
+    } catch (e) {
+      throw DatabaseException();
+    }
+  }
 }
