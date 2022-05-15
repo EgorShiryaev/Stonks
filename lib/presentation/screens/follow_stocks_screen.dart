@@ -9,7 +9,7 @@ import 'package:stonks/presentation/widgets/stocks_list.dart';
 import 'package:stonks/presentation/widgets/search_stroke.dart';
 
 import '../widgets/center_loader.dart';
-import '../widgets/stonk_widgets/stock_widget_type.dart';
+import '../widgets/stock_widgets/stock_widget_type.dart';
 
 class FollowStocksScreen extends StatelessWidget {
   const FollowStocksScreen({Key? key}) : super(key: key);
@@ -28,14 +28,12 @@ class FollowStocksScreen extends StatelessWidget {
         Expanded(
           child: BlocBuilder<FollowStockCubit, FollowStockState>(
             builder: (context, state) {
-              log(state.toString());
               if (state is FollowStockInitialState ||
                   state is FollowStockLoadingState) {
                 return const CenterLoader();
               } else if (state is FollowStockErrorState) {
                 return CenterText(text: state.message);
               } else if (state is FollowStockLoadedState) {
-                log(state.stocks.toString());
                 return StocksList(
                   stocks: state.stocks,
                   emptyWidget: const CenterText(text: emptyListText),

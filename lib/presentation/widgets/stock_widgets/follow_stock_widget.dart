@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
 import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
-import 'package:stonks/presentation/widgets/snack_bar_content.dart';
+import 'package:stonks/presentation/widgets/undo_snack_bar.dart';
 
 class FollowStockWidget extends StatefulWidget {
   final StockEntity stock;
@@ -109,7 +108,7 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: SnackBarContent(stock: widget.stock),
+        content: UndoSnackBarContent(stock: widget.stock),
         duration: const Duration(seconds: 2),
       ),
     );

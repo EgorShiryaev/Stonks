@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
-import 'package:stonks/presentation/widgets/stonk_widgets/follow_stock_widget.dart';
-import 'package:stonks/presentation/widgets/stonk_widgets/search_stock_widget.dart';
-import 'package:stonks/presentation/widgets/stonk_widgets/stock_widget_type.dart';
+import 'package:stonks/presentation/widgets/stock_widgets/follow_stock_widget.dart';
+import 'package:stonks/presentation/widgets/stock_widgets/search_stock_widget.dart';
+import 'package:stonks/presentation/widgets/stock_widgets/stock_widget_type.dart';
 
 class StocksList extends StatelessWidget {
   final List<StockEntity> stocks;

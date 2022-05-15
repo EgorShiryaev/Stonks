@@ -29,7 +29,6 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
           .toList();
       return result;
     } catch (e) {
-      log(e.toString());
       throw LoadFollowedStocksException();
     }
   }

@@ -6,7 +6,8 @@ import '../../domain/usecases/search_stock_usecases.dart';
 class SearchStockCubit extends Cubit<SearchStockState> {
   final SearchStockUseCases _useCases;
 
-  int nRequestSendedNow = 0;
+  int _nRequestSendedNow = 0;
+  bool _stopSearching = false;
 
   SearchStockCubit({required SearchStockUseCases useCases})
       : _useCases = useCases,
@@ -15,10 +16,11 @@ class SearchStockCubit extends Cubit<SearchStockState> {
   void searchStocks(String searchText) async {
     emit(SearchStockLoadingState());
 
-    nRequestSendedNow++;
+    _nRequestSendedNow++;
+    _stopSearching = false;
     final result = await _useCases.search(searchText);
-    nRequestSendedNow--;
-    if (nRequestSendedNow == 0) {
+    _nRequestSendedNow--;
+    if (_nRequestSendedNow == 0 && !_stopSearching) {
       emit(result.fold<SearchStockState>(
         (l) => SearchStockLoadedState(stocks: l, query: searchText),
         (r) => SearchStockErrorState(message: r),
@@ -27,6 +29,7 @@ class SearchStockCubit extends Cubit<SearchStockState> {
   }
 
   void stopSearching() {
+    _stopSearching = true;
     emit(SearchStockInitialState());
   }
 }
