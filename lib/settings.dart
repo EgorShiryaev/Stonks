@@ -6,7 +6,7 @@ class SETTINGS {
   static const appInfoLocalDataSourceUrl = 'app_info';
   static const stocksLocalDataSourcesId = 'box_for_stocks';
 
-  static get websocketUrl => Uri.parse('$_websocketBaseUrl?token=$_token');
+  static get websocketUrl => '$_websocketBaseUrl?token=$_token';
 
   static getUrl(String path) =>
       Uri.parse('$_baseUrl/$path&token=$_sandboxToken');

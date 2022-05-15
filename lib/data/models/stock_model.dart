@@ -15,7 +15,7 @@ class StockModel extends StockEntity {
     return StockModel(
       ticker: json['s'],
       title: '',
-      price: json['p'],
+      price: ((json['p'] * 100) as num).round(),
     );
   }
 

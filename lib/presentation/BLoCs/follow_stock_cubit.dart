@@ -39,7 +39,9 @@ class FollowStockCubit extends Cubit<FollowStockState> {
   }
 
   void updateStockPrice(StockEntity stock) async {
+    emit(FollowStockLoadingState());
     final result = await _useCases.update(stock);
+
     emit(result.fold<FollowStockState>(
       (l) => FollowStockLoadedState(stocks: l),
       (r) => FollowStockErrorState(message: r),

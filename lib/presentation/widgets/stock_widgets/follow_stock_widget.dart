@@ -4,11 +4,15 @@ import 'package:stonks/domain/entity/stock_entity.dart';
 import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
 import 'package:stonks/presentation/widgets/undo_snack_bar.dart';
 
+import '../../BLoCs/listen_last_price_cubit.dart';
+
 class FollowStockWidget extends StatefulWidget {
+  final bool lastPriceServiceIsConnected;
   final StockEntity stock;
   const FollowStockWidget({
     Key? key,
     required this.stock,
+    required this.lastPriceServiceIsConnected,
   }) : super(key: key);
 
   @override
@@ -30,15 +34,15 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
     super.deactivate();
   }
 
-  _subscribe(String prefix) {
-    // Provider.of<StocksProvider>(context, listen: false)
-    //     .subscribeToLastPrice(prefix);
-    lastSubscribeTicker = prefix;
+  _subscribe(String ticker) {
+    if (widget.lastPriceServiceIsConnected) {
+      BlocProvider.of<ListenLastPriceCubit>(context).subcribePrice(ticker);
+      lastSubscribeTicker = ticker;
+    }
   }
 
-  _unsubscribe(String prefix) {
-    // Provider.of<StocksProvider>(context, listen: false)
-    //     .unsubscribeToLastPrice(prefix);
+  _unsubscribe(String ticker) {
+    BlocProvider.of<ListenLastPriceCubit>(context).unsubcribePrice(ticker);
     lastSubscribeTicker = '';
   }
 

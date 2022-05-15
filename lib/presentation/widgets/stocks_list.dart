@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
+import 'package:stonks/presentation/BLoCs/listen_last_price_cubit.dart';
 import 'package:stonks/presentation/widgets/stock_widgets/follow_stock_widget.dart';
 import 'package:stonks/presentation/widgets/stock_widgets/search_stock_widget.dart';
 import 'package:stonks/presentation/widgets/stock_widgets/stock_widget_type.dart';
@@ -32,7 +34,13 @@ class StocksList extends StatelessWidget {
         final stock = stocks[index];
         switch (childrenType) {
           case StockWidgetType.follow:
-            return FollowStockWidget(stock: stock, key: Key(stock.ticker));
+            return FollowStockWidget(
+              stock: stock,
+              key: Key(stock.ticker),
+              lastPriceServiceIsConnected:
+                  BlocProvider.of<ListenLastPriceCubit>(context)
+                      .serviceIsConnected,
+            );
           case StockWidgetType.search:
             return SearchStockWidget(stock: stock, key: Key(stock.ticker));
           default:

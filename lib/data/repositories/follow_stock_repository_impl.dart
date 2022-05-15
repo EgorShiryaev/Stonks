@@ -9,7 +9,7 @@ class FollowStockRepositoryImpl implements FollowStockRepository {
       : _datasource = datasource;
 
   @override
-  Future<List<StockEntity>> get followedStocks async => _datasource.get();
+  Future<List<StockEntity>> get followedStocks async => _datasource.getAll();
 
   @override
   Future<List<StockEntity>> search(String searchText) async =>
@@ -26,5 +26,11 @@ class FollowStockRepositoryImpl implements FollowStockRepository {
   void delete(StockEntity stock) => _datasource.delete(stock);
 
   @override
-  void update(StockEntity stock) => _datasource.update(stock);
+  void update(StockEntity stock) {
+    final newStock = _datasource.get(stock.ticker);
+    if (newStock != null) {
+      newStock.updatePrice(stock.price);
+      _datasource.update(newStock);
+    }
+  }
 }

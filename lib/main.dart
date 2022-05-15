@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stonks/app_theme.dart';
 import 'package:stonks/dependecy_injection.dart';
+import 'package:stonks/presentation/BLoCs/listen_last_price_cubit.dart';
 import 'package:stonks/presentation/BLoCs/search_stock_cubit.dart';
 import 'package:stonks/presentation/screens/home_screen.dart';
 
@@ -30,7 +31,12 @@ class StonksApp extends StatelessWidget {
           BlocProvider<FollowStockCubit>(
             create: (_) => getIt<FollowStockCubit>()..loadFollowedStocks(),
           ),
-          BlocProvider<SearchStockCubit>(create: (_) => getIt<SearchStockCubit>()),
+          BlocProvider<SearchStockCubit>(
+              create: (_) => getIt<SearchStockCubit>()),
+          BlocProvider<ListenLastPriceCubit>(
+            create: (_) =>
+                getIt<ListenLastPriceCubit>()..setupConnectivityListner(),
+          ),
         ],
         child: const HomeScreen(),
       ),

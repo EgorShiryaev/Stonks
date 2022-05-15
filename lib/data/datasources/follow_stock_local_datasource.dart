@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stonks/core/follow_stock_exceptions.dart';
 import 'package:stonks/data/adapters/follow_stock_adapter.dart';
@@ -19,7 +17,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  Future<List<StockEntity>> get() async {
+  Future<List<StockEntity>> getAll() async {
     try {
       if (!Hive.isBoxOpen(SETTINGS.stocksLocalDataSourcesId)) {
         await init();
@@ -68,6 +66,16 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
       await Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId).close();
     } catch (e) {
       throw DatabaseException();
+    }
+  }
+
+  @override
+  StockEntity? get(String ticker) {
+    try {
+      return Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
+          .get(ticker);
+    } catch (e) {
+      throw LoadFollowedStocksException();
     }
   }
 }
