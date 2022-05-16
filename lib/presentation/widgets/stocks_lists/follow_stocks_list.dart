@@ -20,20 +20,22 @@ class FollowStocksList extends StatelessWidget {
     if (stocks.isEmpty) {
       return const CenterText(text: emptyListText);
     }
-    return ListView.separated(
-      physics: const ClampingScrollPhysics(),
-      addAutomaticKeepAlives: false,
-      addSemanticIndexes: false,
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      shrinkWrap: true,
-      itemCount: stocks.length,
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-      itemBuilder: (context, index) => FollowStockWidget(
-        stock: stocks[index],
-        lastPriceServiceIsConnected: lastPriceServiceIsConnected,
-        key: Key(stocks[index].ticker),
+    return Scrollbar(
+      child: ListView.separated(
+        physics: const ClampingScrollPhysics(),
+        addAutomaticKeepAlives: false,
+        addSemanticIndexes: false,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        shrinkWrap: true,
+        itemCount: stocks.length,
+        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+        itemBuilder: (context, index) => FollowStockWidget(
+          stock: stocks[index],
+          lastPriceServiceIsConnected: lastPriceServiceIsConnected,
+          key: Key(stocks[index].ticker),
+        ),
+        separatorBuilder: (context, index) => const Divider(),
       ),
-      separatorBuilder: (context, index) => const Divider(),
     );
   }
 }

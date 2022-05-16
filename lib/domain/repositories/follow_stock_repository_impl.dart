@@ -12,7 +12,12 @@ class FollowStockRepositoryImpl implements FollowStockRepository {
   Future<List<StockEntity>> get followedStocks async => _datasource.getAll();
 
   @override
-  void add(StockEntity stock) => _datasource.add(stock);
+  void add(StockEntity stock) {
+    final newStock = _datasource.get(stock.ticker);
+    if (newStock == null) {
+      _datasource.add(stock);
+    }
+  }
 
   @override
   void delete(StockEntity stock) => _datasource.delete(stock);

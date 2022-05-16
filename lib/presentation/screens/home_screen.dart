@@ -22,6 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
 
+  onChangePage(int index) {
+    if (index == 0) {
+      BlocProvider.of<SearchStockCubit>(context).stopSearching();
+    }
+    setState(() => _index = index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
-        onTap: (index) => setState(() => _index = index),
+        onTap: onChangePage,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
