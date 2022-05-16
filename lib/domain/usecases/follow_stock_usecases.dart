@@ -22,15 +22,6 @@ class FollowStockUseCases {
     }
   }
 
-  Future<Either<List<StockEntity>, String>> searchInFollowed(
-      String searchText) async {
-    try {
-      return Left(await _repository.search(searchText));
-    } catch (e) {
-      return Right(_exceptionConvector.convertToMessage(e as Exception));
-    }
-  }
-
   Future<Either<List<StockEntity>, String>> add(StockEntity stock) async {
     try {
       _repository.add(stock);

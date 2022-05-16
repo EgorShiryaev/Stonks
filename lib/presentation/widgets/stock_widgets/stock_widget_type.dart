@@ -1,4 +1,0 @@
-enum StockWidgetType{
-  follow,
-  search,
-}

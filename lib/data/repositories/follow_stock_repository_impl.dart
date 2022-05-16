@@ -12,14 +12,6 @@ class FollowStockRepositoryImpl implements FollowStockRepository {
   Future<List<StockEntity>> get followedStocks async => _datasource.getAll();
 
   @override
-  Future<List<StockEntity>> search(String searchText) async =>
-      await followedStocks.then((stocks) => stocks
-          .where((element) =>
-              element.ticker.contains(searchText) ||
-              element.title.contains(searchText))
-          .toList());
-
-  @override
   void add(StockEntity stock) => _datasource.add(stock);
 
   @override

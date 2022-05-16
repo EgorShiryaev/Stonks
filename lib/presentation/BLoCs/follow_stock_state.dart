@@ -12,13 +12,6 @@ class FollowStockLoadedState extends FollowStockState {
   FollowStockLoadedState({required this.stocks});
 }
 
-class FollowStockSearchedState extends FollowStockState {
-  final String searchText;
-  final List<StockEntity> stocks;
-
-  FollowStockSearchedState({required this.searchText, required this.stocks});
-}
-
 class FollowStockErrorState extends FollowStockState {
   final String message;
 

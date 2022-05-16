@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stonks/domain/entity/stock_entity.dart';
@@ -29,6 +31,16 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant FollowStockWidget oldWidget) {
+    if (!oldWidget.lastPriceServiceIsConnected &&
+        widget.lastPriceServiceIsConnected) {
+      _subscribe(widget.stock.ticker);
+    }
+    _checkCurrentStockIsSubscribe();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void deactivate() {
     _unsubscribe(widget.stock.ticker);
     super.deactivate();
@@ -42,8 +54,10 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
   }
 
   _unsubscribe(String ticker) {
-    BlocProvider.of<ListenLastPriceCubit>(context).unsubcribePrice(ticker);
-    lastSubscribeTicker = '';
+    if (widget.lastPriceServiceIsConnected) {
+      BlocProvider.of<ListenLastPriceCubit>(context).unsubcribePrice(ticker);
+      lastSubscribeTicker = '';
+    }
   }
 
   _checkCurrentStockIsSubscribe() {
@@ -55,14 +69,7 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _checkCurrentStockIsSubscribe();
     return Dismissible(
       key: Key(widget.stock.ticker),
       direction: DismissDirection.endToStart,

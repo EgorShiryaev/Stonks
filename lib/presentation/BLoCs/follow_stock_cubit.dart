@@ -20,16 +20,6 @@ class FollowStockCubit extends Cubit<FollowStockState> {
     ));
   }
 
-  void searchStocks(String searchText) async {
-    emit(FollowStockLoadingState());
-
-    final result = await _useCases.searchInFollowed(searchText);
-    emit(result.fold<FollowStockState>(
-      (l) => FollowStockSearchedState(stocks: l, searchText: searchText),
-      (r) => FollowStockErrorState(message: r),
-    ));
-  }
-
   void addStock(StockEntity stock) async {
     final result = await _useCases.add(stock);
     emit(result.fold<FollowStockState>(

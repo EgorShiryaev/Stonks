@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:stonks/data/models/stock_model.dart';
 import 'package:stonks/services/listen_last_price_service.dart';
 
@@ -10,32 +10,35 @@ import 'listen_last_price_state.dart';
 
 class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
   final ListenLastPriceService _service;
-  final InternetConnectionChecker _internetConnectionChecker;
+  final Connectivity _connectivity;
 
   ListenLastPriceCubit({
     required ListenLastPriceService service,
-    required InternetConnectionChecker internetConnectionChecker,
+    required Connectivity connectivity,
   })  : _service = service,
-        _internetConnectionChecker = internetConnectionChecker,
+        _connectivity = connectivity,
         super(ListenLastPriceDisconnectedState());
 
-  bool _serviceIsConnected = false;
-  bool get serviceIsConnected => _serviceIsConnected;
-
   void setupConnectivityListner() {
-    _internetConnectionChecker.onStatusChange.listen((event) {
-      if (event == InternetConnectionStatus.connected) {
-        if (_serviceIsConnected) {
-          _connect();
-        } else {
+    /// В iOS статус подключения может не обновляться при изменении статуса WiFi,
+    /// это известная проблема, которая затрагивает только симуляторы.
+    /// Подробнее см. https://github.com/fluttercommunity/plus_plugins/issues/479
+    bool serviceIsConnected = false;
+    _connectivity.onConnectivityChanged.listen((event) {
+      if (event == ConnectivityResult.mobile ||
+          event == ConnectivityResult.wifi ||
+          event == ConnectivityResult.ethernet) {
+        if (serviceIsConnected) {
           emit(ListenLastPriceConnectedState());
+        } else {
+          _connect();
         }
-      } else {
+      } else if (event == ConnectivityResult.none) {
         emit(ListenLastPriceDisconnectedState());
       }
     });
     _service.connectStream.stream.listen((event) {
-      _serviceIsConnected = event;
+      serviceIsConnected = event;
     });
   }
 

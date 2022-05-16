@@ -71,7 +71,7 @@ void setupDependency() {
   getIt.registerFactory<ListenLastPriceCubit>(
     () => ListenLastPriceCubit(
       service: getIt(),
-      internetConnectionChecker: InternetConnectionChecker(),
+      connectivity: Connectivity(),
     ),
   );
 

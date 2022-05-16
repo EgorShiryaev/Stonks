@@ -29,7 +29,7 @@ class ListenLastPriceService {
       {'type': isSubscribe ? 'subscribe' : 'unsubscribe', 'symbol': symbol});
 
   subscribe(String ticker) {
-    log('Subscribe  $ticker lastPrice');
+    // log('Subscribe  $ticker lastPrice');
     channel.add(_getSubscribeJson(true, ticker));
 
     if (_subscribeMap.containsKey(ticker)) {
@@ -42,7 +42,7 @@ class ListenLastPriceService {
   }
 
   unsubscribe(String ticker) {
-    log('Unsubscribe $ticker lastPrice');
+    // log('Unsubscribe $ticker lastPrice');
     final nSubscribe = _subscribeMap[ticker];
     if (nSubscribe != null) {
       if (nSubscribe == 1) {
