@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:stonks/app_theme.dart';
-import 'package:stonks/dependecy_injection.dart';
-import 'package:stonks/presentation/BLoCs/listen_last_price_cubit.dart';
-import 'package:stonks/presentation/BLoCs/search_stock_cubit.dart';
-import 'package:stonks/presentation/screens/home_screen.dart';
-
-import 'presentation/BLoCs/follow_stock_cubit.dart';
+import 'app_theme.dart';
+import 'dependecy_injection.dart';
+import 'presentation/BLoCs/blocs.dart';
+import 'presentation/screens/screens.dart';
 
 void main() async {
   await Hive.initFlutter();

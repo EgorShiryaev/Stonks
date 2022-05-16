@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stonks/domain/entity/stock_entity.dart';
-import 'package:stonks/domain/usecases/follow_stock_usecases.dart';
-import 'package:stonks/presentation/BLoCs/follow_stock_state.dart';
+import '../../domain/entity/entities.dart';
+import '../../domain/usecases/usecases.dart';
+import 'blocs.dart';
 
 class FollowStockCubit extends Cubit<FollowStockState> {
   final FollowStockUseCases _useCases;

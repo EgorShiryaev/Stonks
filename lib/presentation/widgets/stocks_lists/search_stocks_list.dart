@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stonks/domain/entity/stock_entity.dart';
-
-import '../stock_widgets/search_stock_widget.dart';
+import '../../../domain/entity/entities.dart';
+import '../widgets.dart';
 
 class SearchStocksList extends StatelessWidget {
   final List<StockEntity> stocks;

@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import '../../domain/entity/stock_entity.dart';
+import '../../domain/entity/entities.dart';
 
 class FollowStockAdapter extends TypeAdapter<StockEntity> {
   @override

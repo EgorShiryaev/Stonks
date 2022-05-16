@@ -1,4 +1,4 @@
-import 'package:stonks/domain/entity/stock_entity.dart';
+import '../entity/entities.dart';
 
 abstract class FollowStockRepository {
   Future<List<StockEntity>> get followedStocks;

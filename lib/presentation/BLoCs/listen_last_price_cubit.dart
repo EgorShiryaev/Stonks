@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stonks/data/models/stock_model.dart';
-import 'package:stonks/services/listen_last_price_service.dart';
-
-import '../../domain/entity/stock_entity.dart';
-import 'listen_last_price_state.dart';
+import '../../data/models/models.dart';
+import '../../domain/entity/entities.dart';
+import '../../services/services.dart';
+import 'blocs.dart';
 
 class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
   final ListenLastPriceService _service;

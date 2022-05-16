@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stonks/presentation/widgets/center_text.dart';
-import 'package:stonks/presentation/widgets/stock_widgets/follow_stock_widget.dart';
-import '../../../domain/entity/stock_entity.dart';
+import '../../../domain/entity/entities.dart';
+import '../widgets.dart';
 
 class FollowStocksList extends StatelessWidget {
   final List<StockEntity> stocks;

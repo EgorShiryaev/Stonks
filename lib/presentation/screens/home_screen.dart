@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stonks/presentation/screens/follow_stocks_screen.dart';
-import 'package:stonks/presentation/screens/search_stocks_screen.dart';
-import 'package:stonks/presentation/widgets/stonks_app_bar_content.dart';
-import 'package:stonks/presentation/BLoCs/listen_last_price_cubit.dart';
-import 'package:stonks/presentation/BLoCs/listen_last_price_state.dart';
 
-import '../../domain/entity/stock_entity.dart';
-import '../BLoCs/follow_stock_cubit.dart';
+import '../../domain/entity/entities.dart';
+import '../BLoCs/blocs.dart';
+import '../widgets/widgets.dart';
+import 'screens.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

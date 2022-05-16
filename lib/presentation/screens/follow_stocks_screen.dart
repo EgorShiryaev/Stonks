@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stonks/presentation/BLoCs/follow_stock_cubit.dart';
-import 'package:stonks/presentation/BLoCs/follow_stock_state.dart';
-import 'package:stonks/presentation/widgets/center_text.dart';
-
-import '../widgets/center_loader.dart';
-import '../widgets/stocks_lists/follow_stocks_list.dart';
+import '../BLoCs/blocs.dart';
+import '../widgets/widgets.dart';
 
 class FollowStocksScreen extends StatelessWidget {
   final bool lastPriceServiceIsConnected;

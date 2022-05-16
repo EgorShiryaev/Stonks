@@ -1,6 +1,6 @@
-import 'package:stonks/data/datasources/follow_stock_datasource.dart';
-import 'package:stonks/domain/entity/stock_entity.dart';
-import 'package:stonks/domain/repositories/follow_stock_repository.dart';
+import '../../data/datasources/datasources.dart';
+import '../entity/entities.dart';
+import 'repositories.dart';
 
 class FollowStockRepositoryImpl implements FollowStockRepository {
   final FollowStockDatasource _datasource;

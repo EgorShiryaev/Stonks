@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../BLoCs/blocs.dart';
 
 class SearchStroke extends StatefulWidget {
-  final void Function(String text) search;
-  final void Function() clear;
-
   const SearchStroke({
     Key? key,
-    required this.search,
-    required this.clear,
   }) : super(key: key);
 
   @override
@@ -53,9 +50,9 @@ class _SearchStrokeState extends State<SearchStroke> {
   void _onChanged(String text) {
     setState(() {});
     if (text.isEmpty) {
-      return widget.clear();
+      return BlocProvider.of<SearchStockCubit>(context).stopSearching();
     }
-    return widget.search(text);
+    return BlocProvider.of<SearchStockCubit>(context).searchStocks(text);
   }
 
   _clear() {

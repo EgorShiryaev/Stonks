@@ -1,4 +1,4 @@
-import 'package:stonks/core/stonks_exception.dart';
+import 'exceptions.dart';
 
 class ExceptionConvector {
   String convertToMessage(Exception e) {

@@ -1,4 +1,4 @@
-import 'package:stonks/core/stonks_exception.dart';
+import 'exceptions.dart';
 
 class InternetConnectionException implements StonksException {
   @override

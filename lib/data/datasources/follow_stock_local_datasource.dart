@@ -1,10 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:stonks/core/follow_stock_exceptions.dart';
-import 'package:stonks/data/adapters/follow_stock_adapter.dart';
-
-import '../../domain/entity/stock_entity.dart';
+import '../../domain/entity/entities.dart';
+import '../../exceptions/exceptions.dart';
 import '../../settings.dart';
-import 'follow_stock_datasource.dart';
+import '../adapters/adapters.dart';
+import 'datasources.dart';
 
 class FollowStockLocalDatasource implements FollowStockDatasource {
   Future<void> init() async {

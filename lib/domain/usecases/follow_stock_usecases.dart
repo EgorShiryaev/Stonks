@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:stonks/domain/repositories/follow_stock_repository.dart';
 
-import '../../core/exception_convector.dart';
-import '../entity/stock_entity.dart';
+import '../../exceptions/exceptions.dart';
+import '../entity/entities.dart';
+import '../repositories/repositories.dart';
 
 class FollowStockUseCases {
   final FollowStockRepository _repository;

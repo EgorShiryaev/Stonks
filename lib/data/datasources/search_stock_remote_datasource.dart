@@ -1,13 +1,11 @@
 import 'dart:convert';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart';
-import 'package:stonks/data/datasources/search_stock_datasource.dart';
-import 'package:stonks/data/models/stock_model.dart';
-import 'package:stonks/domain/entity/stock_entity.dart';
-
-import '../../core/search_stock_exceptions.dart';
+import '../../domain/entity/entities.dart';
+import '../../exceptions/exceptions.dart';
 import '../../settings.dart';
+import '../models/models.dart';
+import 'datasources.dart';
 
 class SearchStockRemoteDatasource implements SearchStockDatasource {
   final Client _client;

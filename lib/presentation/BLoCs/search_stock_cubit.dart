@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stonks/presentation/BLoCs/search_stock_state.dart';
-
-import '../../domain/usecases/search_stock_usecases.dart';
+import '../../domain/usecases/usecases.dart';
+import 'blocs.dart';
 
 class SearchStockCubit extends Cubit<SearchStockState> {
   final SearchStockUseCases _useCases;
