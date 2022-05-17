@@ -44,7 +44,9 @@ class ListenLastPriceService {
   }
 
   unsubscribe(String ticker) {
-    channel.add(_getSinkJson(isSubscribe: false, symbol: ticker));
+    if (_subscribes.where((element) => element == ticker).length == 1) {
+      channel.add(_getSinkJson(isSubscribe: false, symbol: ticker));
+    }
     _subscribes.remove(ticker);
     log('Subscribes: $_subscribes');
   }
