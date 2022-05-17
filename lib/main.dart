@@ -1,28 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:provider/provider.dart';
-import 'package:stonks/app_theme.dart';
-import 'package:stonks/providers/stocks_provider.dart';
-import 'package:stonks/screens/home_screen.dart';
+import 'app_theme.dart';
+import 'dependecy_injection.dart';
+import 'presentation/BLoCs/blocs.dart';
+import 'presentation/screens/screens.dart';
 
 void main() async {
   await Hive.initFlutter();
   initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  setupDependency();
+  runApp(const StonksApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class StonksApp extends StatelessWidget {
+  const StonksApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stonks',
       theme: AppTheme().light,
-      home: ChangeNotifierProvider(
-        create: (context) => StocksProvider()..init(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<FollowStockCubit>(
+            create: (_) => getIt<FollowStockCubit>()..loadFollowedStocks(),
+          ),
+          BlocProvider<SearchStockCubit>(
+              create: (_) => getIt<SearchStockCubit>()),
+          BlocProvider<ListenLastPriceCubit>(
+            create: (_) =>
+                getIt<ListenLastPriceCubit>()..setupConnectivityListner(),
+          ),
+        ],
         child: const HomeScreen(),
       ),
     );
