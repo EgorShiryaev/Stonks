@@ -22,22 +22,20 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
     /// В iOS статус подключения может не обновляться при изменении статуса WiFi,
     /// это известная проблема, которая затрагивает только симуляторы.
     /// Подробнее см. https://github.com/fluttercommunity/plus_plugins/issues/479
-    bool serviceIsConnected = false;
     _connectivity.onConnectivityChanged.listen((event) {
       if (event == ConnectivityResult.mobile ||
           event == ConnectivityResult.wifi ||
           event == ConnectivityResult.ethernet) {
-        if (serviceIsConnected) {
-          emit(ListenLastPriceConnectedState());
+        if (_service.isConnect) {
+          if (super.state is ListenLastPriceDisconnectedState) {
+            emit(ListenLastPriceConnectedState());
+          }
         } else {
           _connect();
         }
       } else if (event == ConnectivityResult.none) {
         emit(ListenLastPriceDisconnectedState());
       }
-    });
-    _service.connectStream.stream.listen((event) {
-      serviceIsConnected = event;
     });
   }
 

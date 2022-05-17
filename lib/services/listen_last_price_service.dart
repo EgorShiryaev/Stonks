@@ -7,17 +7,20 @@ import '../settings.dart';
 class ListenLastPriceService {
   late WebSocket channel;
 
-  final StreamController<bool> connectStream = StreamController()..add(false);
+  bool _isConnect = false;
+  bool get isConnect => _isConnect;
 
   Future<bool> connect() async {
-    log("conecting...");
+    log("connecting...");
     try {
-      channel = await WebSocket.connect(SETTINGS.websocketUrl);
-      connectStream.sink.add(true);
-      log("conected");
+      if (!_isConnect) {
+        channel = await WebSocket.connect(SETTINGS.websocketUrl);
+        _isConnect = true;
+      }
+      log("connected");
       return true;
     } catch (e) {
-     connectStream.sink.add(false);
+      _isConnect = false;
       log("Error! can not connect WS " + e.toString());
       return false;
     }
@@ -29,7 +32,6 @@ class ListenLastPriceService {
       {'type': isSubscribe ? 'subscribe' : 'unsubscribe', 'symbol': symbol});
 
   subscribe(String ticker) {
-    // log('Subscribe  $ticker lastPrice');
     channel.add(_getSubscribeJson(true, ticker));
 
     if (_subscribeMap.containsKey(ticker)) {
@@ -42,7 +44,6 @@ class ListenLastPriceService {
   }
 
   unsubscribe(String ticker) {
-    // log('Unsubscribe $ticker lastPrice');
     final nSubscribe = _subscribeMap[ticker];
     if (nSubscribe != null) {
       if (nSubscribe == 1) {
