@@ -28,7 +28,7 @@ class ListenLastPriceService {
 
   final _subscribes = <String>[];
 
-  String _getSubscribeJson({
+  String _getSinkJson({
     required bool isSubscribe,
     required String symbol,
   }) =>
@@ -38,13 +38,13 @@ class ListenLastPriceService {
       });
 
   subscribe(String ticker) {
-    channel.add(_getSubscribeJson(isSubscribe: true, symbol: ticker));
+    channel.add(_getSinkJson(isSubscribe: true, symbol: ticker));
     _subscribes.add(ticker);
     log('Subscribes: $_subscribes');
   }
 
   unsubscribe(String ticker) {
-    channel.add(_getSubscribeJson(isSubscribe: false, symbol: ticker));
+    channel.add(_getSinkJson(isSubscribe: false, symbol: ticker));
     _subscribes.remove(ticker);
     log('Subscribes: $_subscribes');
   }
