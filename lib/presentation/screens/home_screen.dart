@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text('Подключение к серверу...'),
-          CircularProgressIndicator.adaptive()
+          CircularProgressIndicator(color: Colors.white),
         ],
       ),
       const Duration(days: 1),
