@@ -26,34 +26,27 @@ class ListenLastPriceService {
     }
   }
 
-  final _subscribeMap = <String, int>{};
+  final _subscribes = <String>[];
 
-  String _getSubscribeJson(bool isSubscribe, String symbol) => json.encode(
-      {'type': isSubscribe ? 'subscribe' : 'unsubscribe', 'symbol': symbol});
+  String _getSubscribeJson({
+    required bool isSubscribe,
+    required String symbol,
+  }) =>
+      json.encode({
+        'type': isSubscribe ? 'subscribe' : 'unsubscribe',
+        'symbol': symbol
+      });
 
   subscribe(String ticker) {
-    channel.add(_getSubscribeJson(true, ticker));
-
-    if (_subscribeMap.containsKey(ticker)) {
-      _subscribeMap.update(ticker, (value) => value + 1);
-    } else {
-      _subscribeMap.addEntries({ticker: 1}.entries);
-    }
-
-    log('Subscribes: $_subscribeMap');
+    channel.add(_getSubscribeJson(isSubscribe: true, symbol: ticker));
+    _subscribes.add(ticker);
+    log('Subscribes: $_subscribes');
   }
 
   unsubscribe(String ticker) {
-    final nSubscribe = _subscribeMap[ticker];
-    if (nSubscribe != null) {
-      if (nSubscribe == 1) {
-        channel.add(_getSubscribeJson(false, ticker));
-        _subscribeMap.remove(ticker);
-      } else {
-        _subscribeMap.update(ticker, (value) => value - 1);
-      }
-    }
-    log('Subscribes: $_subscribeMap');
+    channel.add(_getSubscribeJson(isSubscribe: false, symbol: ticker));
+    _subscribes.remove(ticker);
+    log('Subscribes: $_subscribes');
   }
 
   dispose() async => await channel.close();
