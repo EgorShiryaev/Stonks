@@ -1,39 +1,26 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/models.dart';
-import '../../domain/entity/entities.dart';
 import '../../services/services.dart';
 import 'blocs.dart';
 
 class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
   final ListenLastPriceService _service;
-  final Connectivity _connectivity;
+  final ConnectionCheckerService _connectionChecker;
 
   ListenLastPriceCubit({
     required ListenLastPriceService service,
-    required Connectivity connectivity,
+    required ConnectionCheckerService connectionChecker,
   })  : _service = service,
-        _connectivity = connectivity,
+        _connectionChecker = connectionChecker,
         super(ListenLastPriceDisconnectedState());
 
+  bool _serviceListnerIsSetuped = false;
+
   void setupConnectivityListner() {
-    /// В iOS статус подключения может не обновляться при изменении статуса WiFi,
-    /// это известная проблема, которая затрагивает только симуляторы.
-    /// Подробнее см. https://github.com/fluttercommunity/plus_plugins/issues/479
-    _connectivity.onConnectivityChanged.listen((event) {
-      if (event == ConnectivityResult.mobile ||
-          event == ConnectivityResult.wifi ||
-          event == ConnectivityResult.ethernet) {
-        if (_service.isConnect) {
-          if (super.state is ListenLastPriceDisconnectedState) {
-            emit(ListenLastPriceConnectedState());
-          }
-        } else {
-          _connect();
-        }
-      } else if (event == ConnectivityResult.none) {
+    _connectionChecker.connectionStream.listen((event) {
+      if (event) {
+        _connect();
+      } else {
+        _service.unsubscribeToAllStocksPrice();
         emit(ListenLastPriceDisconnectedState());
       }
     });
@@ -46,32 +33,21 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
 
     if (result) {
       emit(ListenLastPriceConnectedState());
-      _setupServiceListener();
+      if (!_serviceListnerIsSetuped) {
+        _setupServiceListener();
+        _serviceListnerIsSetuped = true;
+      }
     }
   }
 
   void _setupServiceListener() {
-    _service.channel.listen(_onNewEvent, onDone: () {
-      _connect();
-    }, onError: (e) {
-      log('Server error: $e');
-      _connect();
+    _service.lastPriceStream.listen((event) {
+      emit(ListenLastPriceNewDataState(stocks: event));
     });
   }
 
-  void _onNewEvent(dynamic event) {
-    final response = jsonDecode(event);
-    if (response['type'] != 'ping') {
-      emit(ListenLastPriceNewDataState(stocks: []));
-      final List<StockEntity> stocks = (response['data'] as List)
-          .map((json) => StockModel.fromLastPriceService(json))
-          .toList();
+  void subcribePrice(String ticker) => _service.subscribeToStockPrice(ticker);
 
-      emit(ListenLastPriceNewDataState(stocks: stocks));
-    }
-  }
-
-  void subcribePrice(String ticker) => _service.subscribe(ticker);
-
-  void unsubcribePrice(String ticker) => _service.unsubscribe(ticker);
+  void unsubcribePrice(String ticker) =>
+      _service.unsubscribeToStockPrice(ticker);
 }

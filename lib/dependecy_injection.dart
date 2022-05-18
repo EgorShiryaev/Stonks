@@ -1,6 +1,6 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'data/datasources/datasources.dart';
 import 'domain/repositories/repositories.dart';
 import 'domain/usecases/usecases.dart';
@@ -12,6 +12,11 @@ final getIt = GetIt.instance;
 
 void setupDependency() {
   getIt.registerLazySingleton<ExceptionConvector>(() => ExceptionConvector());
+
+  getIt.registerLazySingleton<ConnectionCheckerService>(
+    () => ConnectionCheckerService(checker: InternetConnectionChecker())
+      ..setupListener(),
+  );
 
   // Follow stock
   getIt.registerFactory<FollowStockCubit>(
@@ -52,7 +57,7 @@ void setupDependency() {
   getIt.registerLazySingleton<SearchStockDatasource>(
     () => SearchStockRemoteDatasource(
       client: http.Client(),
-      connectivity: Connectivity(),
+      connectionChecker: getIt(),
     ),
   );
 
@@ -60,7 +65,7 @@ void setupDependency() {
   getIt.registerFactory<ListenLastPriceCubit>(
     () => ListenLastPriceCubit(
       service: getIt(),
-      connectivity: Connectivity(),
+      connectionChecker: getIt(),
     ),
   );
 
