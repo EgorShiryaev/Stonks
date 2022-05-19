@@ -17,6 +17,7 @@ class ConnectionCheckerService {
   Stream<bool> get connectionStream => _connectionStreamController.stream;
 
   void setupListener() {
+    _connectionStreamController.add(_internetIsConnect);
     _checker.onStatusChange.listen((event) {
       log(event.toString());
       if (event == InternetConnectionStatus.connected && !_internetIsConnect) {
