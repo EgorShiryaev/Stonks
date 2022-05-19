@@ -11,11 +11,6 @@ class LoadFollowedStocksException implements StonksException {
       'Ошибка загрузки отслеживаемых акций.\nПереустановите приложение!';
 }
 
-class SearchFollowedStockException implements StonksException {
-  @override
-  String get message => 'Ошибка поиска в списке отслеживаемых акций.';
-}
-
 class AddStockException implements StonksException {
   final String _ticker;
 

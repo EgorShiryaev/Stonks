@@ -18,12 +18,11 @@ class ListenLastPriceService {
 
   StreamSubscription? _webSocketListner;
 
-
   Future<bool> connect() async {
     log("connecting...");
     try {
       if (_channel != null) {
-        _channel!.close();
+        await dispose();
       }
       _channel = await WebSocket.connect(SETTINGS.websocketUrl);
       _setupWebSocketListner();
