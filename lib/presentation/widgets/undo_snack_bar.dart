@@ -24,7 +24,7 @@ class UndoSnackBarContent extends StatelessWidget {
     );
   }
 
-  _onUndo(BuildContext context) {
+  void _onUndo(BuildContext context) {
     BlocProvider.of<FollowStockCubit>(context).addStock(stock);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entity/entities.dart';
 import '../../services/services.dart';
 import 'blocs.dart';
 
@@ -13,14 +16,15 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
         _connectionChecker = connectionChecker,
         super(ListenLastPriceDisconnectedState());
 
-  bool _serviceListnerIsSetuped = false;
+  // ignore: cancel_subscriptions
+  StreamSubscription<List<StockEntity>>? _listner;
 
   void setupConnectivityListner() {
     _connectionChecker.connectionStream.listen((event) {
       if (event) {
         _connect();
       } else {
-        _service.unsubscribeToAllStocksPrice();
+        _service.clearSubscribeArray();
         emit(ListenLastPriceDisconnectedState());
       }
     });
@@ -33,15 +37,14 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
 
     if (result) {
       emit(ListenLastPriceConnectedState());
-      if (!_serviceListnerIsSetuped) {
+      if (_listner == null) {
         _setupServiceListener();
-        _serviceListnerIsSetuped = true;
       }
     }
   }
 
   void _setupServiceListener() {
-    _service.lastPriceStream.listen((event) {
+    _listner = _service.lastPriceStream.listen((event) {
       emit(ListenLastPriceNewDataState(stocks: event));
     });
   }
@@ -50,4 +53,12 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
 
   void unsubcribePrice(String ticker) =>
       _service.unsubscribeToStockPrice(ticker);
+
+  Future<void> dispose() async {
+    if (_listner != null) {
+      await _listner!.cancel();
+    }
+    await _service.dispose();
+    await _connectionChecker.dispose();
+  }
 }

@@ -55,7 +55,7 @@ class _SearchStrokeState extends State<SearchStroke> {
     return BlocProvider.of<SearchStockCubit>(context).searchStocks(text);
   }
 
-  _clear() {
+  void _clear() {
     controller.clear();
     _onChanged(controller.text);
     if (_focusNode.hasFocus) {

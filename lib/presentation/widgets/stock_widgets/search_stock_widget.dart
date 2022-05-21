@@ -41,7 +41,7 @@ class SearchStockWidget extends StatelessWidget {
     );
   }
 
-  _onAdd(BuildContext context) {
+  void _onAdd(BuildContext context) {
     BlocProvider.of<FollowStockCubit>(context).addStock(stock);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

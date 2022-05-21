@@ -10,7 +10,7 @@ import 'services/services.dart';
 
 final getIt = GetIt.instance;
 
-void setupDependency() {
+Future<void> setupDependency() async {
   getIt.registerLazySingleton<ExceptionConvector>(() => ExceptionConvector());
 
   getIt.registerLazySingleton<ConnectionCheckerService>(
@@ -34,8 +34,11 @@ void setupDependency() {
     () => FollowStockRepositoryImpl(datasource: getIt()),
   );
 
+  final followStockLocalDatasource = FollowStockLocalDatasource();
+  await followStockLocalDatasource.init();
+
   getIt.registerLazySingleton<FollowStockDatasource>(
-    () => FollowStockLocalDatasource(),
+    () => followStockLocalDatasource,
   );
 
   // Search stock
@@ -57,7 +60,7 @@ void setupDependency() {
   getIt.registerLazySingleton<SearchStockDatasource>(
     () => SearchStockRemoteDatasource(
       client: http.Client(),
-      connectionChecker: getIt(),
+      connectionChecker: InternetConnectionChecker(),
     ),
   );
 

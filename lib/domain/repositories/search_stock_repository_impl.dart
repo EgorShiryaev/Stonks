@@ -12,4 +12,9 @@ class SearchStockRepositoryImpl implements SearchStockRepository {
   Future<List<StockEntity>> search(String searchText) {
     return _datasource.search(searchText);
   }
+
+  @override
+  Future<void> dispose() async {
+    await _datasource.dispose();
+  }
 }

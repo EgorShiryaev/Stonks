@@ -13,7 +13,7 @@ class StockModel extends StockEntity {
 
   factory StockModel.fromLastPriceService(Map<String, dynamic> json) {
     return StockModel(
-      ticker: json['s'],
+      ticker: json['s'] as String,
       title: '',
       price: ((json['p'] * 100) as num).round(),
     );
@@ -21,8 +21,8 @@ class StockModel extends StockEntity {
 
   factory StockModel.fromSearch(Map<String, dynamic> json) {
     return StockModel(
-      ticker: json['symbol'],
-      title: json['description'],
+      ticker: json['symbol'] as String,
+      title: json['description'] as String,
       price: 0,
     );
   }

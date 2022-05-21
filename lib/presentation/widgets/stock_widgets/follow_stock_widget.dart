@@ -18,8 +18,6 @@ class FollowStockWidget extends StatefulWidget {
 }
 
 class _FollowStockWidgetState extends State<FollowStockWidget> {
-  String lastSubscribeTicker = '';
-
   @override
   void initState() {
     _subscribe(widget.stock.ticker);
@@ -32,7 +30,7 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
         widget.lastPriceServiceIsConnected) {
       _subscribe(widget.stock.ticker);
     }
-    _checkCurrentStockIsSubscribe();
+    _checkCurrentStockIsSubscribe(oldWidget.stock.ticker, widget.stock.ticker);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -42,24 +40,21 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
     super.deactivate();
   }
 
-  _subscribe(String ticker) {
+  void _subscribe(String ticker) {
     if (widget.lastPriceServiceIsConnected) {
       BlocProvider.of<ListenLastPriceCubit>(context).subcribePrice(ticker);
-      lastSubscribeTicker = ticker;
     }
   }
 
-  _unsubscribe(String ticker) {
+  void _unsubscribe(String ticker) {
     if (widget.lastPriceServiceIsConnected) {
       BlocProvider.of<ListenLastPriceCubit>(context).unsubcribePrice(ticker);
-      lastSubscribeTicker = '';
     }
   }
 
-  _checkCurrentStockIsSubscribe() {
-    if (lastSubscribeTicker != widget.stock.ticker &&
-        lastSubscribeTicker.isNotEmpty) {
-      _unsubscribe(lastSubscribeTicker);
+  void _checkCurrentStockIsSubscribe(String oldTicker, String newTicker) {
+    if (oldTicker != newTicker) {
+      _unsubscribe(oldTicker);
       _subscribe(widget.stock.ticker);
     }
   }
@@ -111,7 +106,7 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
     );
   }
 
-  _onDismissed(_) {
+  void _onDismissed(_) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

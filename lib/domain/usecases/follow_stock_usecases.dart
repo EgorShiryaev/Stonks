@@ -24,7 +24,7 @@ class FollowStockUseCases {
 
   Future<Either<List<StockEntity>, String>> add(StockEntity stock) async {
     try {
-      _repository.add(stock);
+      await _repository.add(stock);
       return Left(await _repository.followedStocks);
     } catch (e) {
       return Right(_exceptionConvector.convertToMessage(e as Exception));
@@ -33,7 +33,7 @@ class FollowStockUseCases {
 
   Future<Either<List<StockEntity>, String>> update(StockEntity stock) async {
     try {
-      _repository.update(stock);
+      await _repository.update(stock);
       return Left(await _repository.followedStocks);
     } catch (e) {
       return Right(_exceptionConvector.convertToMessage(e as Exception));
@@ -42,10 +42,14 @@ class FollowStockUseCases {
 
   Future<Either<List<StockEntity>, String>> delete(StockEntity stock) async {
     try {
-      _repository.delete(stock);
+      await _repository.delete(stock);
       return Left(await _repository.followedStocks);
     } catch (e) {
       return Right(_exceptionConvector.convertToMessage(e as Exception));
     }
+  }
+
+  Future<void> dispose() async {
+    await _repository.dispose();
   }
 }

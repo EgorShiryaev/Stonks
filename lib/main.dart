@@ -11,7 +11,7 @@ void main() async {
   await Hive.initFlutter();
   initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
-  setupDependency();
+  await setupDependency();
   runApp(const StonksApp());
 }
 

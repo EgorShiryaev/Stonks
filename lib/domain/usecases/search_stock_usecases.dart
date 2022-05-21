@@ -20,4 +20,8 @@ class SearchStockUseCases {
       return Right(_exceptionConvector.convertToMessage(e as Exception));
     }
   }
+
+  Future<void> dispose() async {
+    await _repository.dispose();
+  }
 }

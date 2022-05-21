@@ -18,15 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool lastPriceServiceIsConnected = false;
 
-  onConnectService() => setState(() => lastPriceServiceIsConnected = true);
-
-  onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
-
-  onChangePage(int index) {
-    if (index == 0) {
-      BlocProvider.of<SearchStockCubit>(context).stopSearching();
-    }
-    setState(() => _index = index);
+  @override
+  void dispose() {
+    BlocProvider.of<SearchStockCubit>(context).dispose();
+    BlocProvider.of<FollowStockCubit>(context).dispose();
+    BlocProvider.of<SearchStockCubit>(context).dispose();
+    super.dispose();
   }
 
   @override
@@ -74,11 +71,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void onConnectService() => setState(() => lastPriceServiceIsConnected = true);
+
+  void onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
+
+  void onChangePage(int index) {
+    if (index == 0) {
+      BlocProvider.of<SearchStockCubit>(context).stopSearching();
+    }
+    setState(() => _index = index);
+  }
+
   void _onNewDataState(
     BuildContext context,
     List<StockEntity> stocks,
   ) {
-    for (var stock in stocks) {
+    for (final stock in stocks) {
       BlocProvider.of<FollowStockCubit>(context).updateStockPrice(stock);
     }
   }

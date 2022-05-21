@@ -10,8 +10,6 @@ class ConnectionCheckerService {
 
   bool _internetIsConnect = false;
 
-  bool get internetIsConnect => _internetIsConnect;
-
   final StreamController<bool> _connectionStreamController = StreamController();
 
   Stream<bool> get connectionStream => _connectionStreamController.stream;
@@ -29,5 +27,9 @@ class ConnectionCheckerService {
         _connectionStreamController.add(_internetIsConnect);
       }
     });
+  }
+
+  Future<void> dispose() async {
+    await _connectionStreamController.close();
   }
 }

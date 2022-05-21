@@ -5,7 +5,9 @@ import 'blocs.dart';
 class SearchStockCubit extends Cubit<SearchStockState> {
   final SearchStockUseCases _useCases;
 
+  // Необхожимо для отображения последнего запроса
   int _nRequestSendedNow = 0;
+  // Необхожимо для того чтобы при очистке поиска не отображался последний запрос
   bool _stopSearching = false;
 
   SearchStockCubit({required SearchStockUseCases useCases})
@@ -30,5 +32,9 @@ class SearchStockCubit extends Cubit<SearchStockState> {
   void stopSearching() {
     _stopSearching = true;
     emit(SearchStockInitialState());
+  }
+
+  Future<void> dispose() async{
+    await _useCases.dispose();
   }
 }
