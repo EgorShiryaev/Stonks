@@ -71,11 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  onConnectService() => setState(() => lastPriceServiceIsConnected = true);
+  void onConnectService() => setState(() => lastPriceServiceIsConnected = true);
 
-  onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
+  void onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
 
-  onChangePage(int index) {
+  void onChangePage(int index) {
     if (index == 0) {
       BlocProvider.of<SearchStockCubit>(context).stopSearching();
     }
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     List<StockEntity> stocks,
   ) {
-    for (var stock in stocks) {
+    for (final stock in stocks) {
       BlocProvider.of<FollowStockCubit>(context).updateStockPrice(stock);
     }
   }

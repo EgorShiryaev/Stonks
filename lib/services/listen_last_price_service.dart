@@ -8,6 +8,7 @@ import '../data/models/models.dart';
 import '../settings.dart';
 
 class ListenLastPriceService {
+  // ignore: close_sinks
   WebSocket? _channel;
 
   final StreamController<List<StockEntity>> _lastPriceStreamController =
@@ -16,20 +17,21 @@ class ListenLastPriceService {
   Stream<List<StockEntity>> get lastPriceStream =>
       _lastPriceStreamController.stream;
 
-  StreamSubscription? _webSocketListner;
+  // ignore: cancel_subscriptions
+  StreamSubscription<dynamic>? _webSocketListner;
 
   Future<bool> connect() async {
-    log("connecting...");
+    log('connecting...');
     try {
       if (_channel != null) {
         await _channel!.close();
       }
       _channel = await WebSocket.connect(SETTINGS.websocketUrl);
       _setupWebSocketListner();
-      log("connected");
+      log('connected');
       return true;
     } catch (e) {
-      log("Error! can not connect WS " + e.toString());
+      log('Error! can not connect WS ' + e.toString());
       return false;
     }
   }
@@ -39,23 +41,27 @@ class ListenLastPriceService {
       await _webSocketListner!.cancel();
     }
     _webSocketListner = _channel!.listen((dynamic event) {
-      final response = jsonDecode(event);
+      final response = jsonDecode(event as String);
       if (response['type'] != 'ping') {
         final List<StockEntity> stocks = (response['data'] as List)
-            .map((json) => StockModel.fromLastPriceService(json))
+            .map((json) =>
+                StockModel.fromLastPriceService(json as Map<String, dynamic>))
             .toList();
         _lastPriceStreamController.add(stocks);
       }
     }, onDone: () {
       connect();
-    }, onError: (e) {
+    }, onError: (Object e) {
       log('Server error: $e');
       connect();
     });
   }
 
   Future<void> dispose() async {
-    await _channel!.close();
+    if (_channel != null) {
+      await _channel!.close();
+    }
+
     if (_webSocketListner != null) {
       await _webSocketListner!.cancel();
     }

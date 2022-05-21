@@ -16,6 +16,7 @@ class ListenLastPriceCubit extends Cubit<ListenLastPriceState> {
         _connectionChecker = connectionChecker,
         super(ListenLastPriceDisconnectedState());
 
+  // ignore: cancel_subscriptions
   StreamSubscription<List<StockEntity>>? _listner;
 
   void setupConnectivityListner() {

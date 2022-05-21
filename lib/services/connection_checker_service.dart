@@ -10,8 +10,6 @@ class ConnectionCheckerService {
 
   bool _internetIsConnect = false;
 
-  bool get internetIsConnect => _internetIsConnect;
-
   final StreamController<bool> _connectionStreamController = StreamController();
 
   Stream<bool> get connectionStream => _connectionStreamController.stream;

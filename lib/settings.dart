@@ -5,8 +5,8 @@ class SETTINGS {
   static const _baseUrl = 'https://finnhub.io/api/v1';
   static const stocksLocalDataSourcesId = 'box_for_stocks';
 
-  static get websocketUrl => '$_websocketBaseUrl?token=$_token';
+  static String get websocketUrl => '$_websocketBaseUrl?token=$_token';
 
-  static getUrl(String path) =>
+  static Uri getUrl(String path) =>
       Uri.parse('$_baseUrl/$path&token=$_sandboxToken');
 }
