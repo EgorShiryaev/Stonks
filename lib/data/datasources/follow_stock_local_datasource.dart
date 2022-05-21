@@ -6,6 +6,7 @@ import '../adapters/adapters.dart';
 import 'datasources.dart';
 
 class FollowStockLocalDatasource implements FollowStockDatasource {
+  @override
   Future<void> init() async {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(FollowStockAdapter());
@@ -18,9 +19,6 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   @override
   Future<List<StockEntity>> getAll() async {
     try {
-      if (!Hive.isBoxOpen(SETTINGS.stocksLocalDataSourcesId)) {
-        await init();
-      }
       final result = Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
           .values
           .toList();
@@ -31,7 +29,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  void add(StockEntity stock) {
+  Future<void> add(StockEntity stock) async {
     try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
           .put(stock.ticker, stock);
@@ -41,7 +39,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  void update(StockEntity stock) {
+  Future<void> update(StockEntity stock) async {
     try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
           .put(stock.ticker, stock);
@@ -51,7 +49,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  void delete(StockEntity stock) {
+  Future<void> delete(StockEntity stock) async {
     try {
       Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
           .delete(stock.ticker);
@@ -60,6 +58,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
     }
   }
 
+  @override
   Future<void> dispose() async {
     try {
       await Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId).close();
@@ -69,7 +68,7 @@ class FollowStockLocalDatasource implements FollowStockDatasource {
   }
 
   @override
-  StockEntity? get(String ticker) {
+  Future<StockEntity?> get(String ticker) async {
     try {
       return Hive.box<StockEntity>(SETTINGS.stocksLocalDataSourcesId)
           .get(ticker);

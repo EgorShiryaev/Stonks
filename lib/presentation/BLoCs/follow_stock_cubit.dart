@@ -45,4 +45,8 @@ class FollowStockCubit extends Cubit<FollowStockState> {
       (r) => FollowStockErrorState(message: r),
     ));
   }
+
+  Future<void> dispose() async {
+    await _useCases.dispose();
+  }
 }

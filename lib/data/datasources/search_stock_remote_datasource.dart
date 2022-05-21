@@ -37,4 +37,10 @@ class SearchStockRemoteDatasource implements SearchStockDatasource {
       throw InternetConnectionException();
     }
   }
+
+  @override
+  Future<void> dispose() async {
+    _client.close();
+    await _connectionChecker.dispose();
+  }
 }

@@ -3,9 +3,11 @@ import '../entity/entities.dart';
 abstract class FollowStockRepository {
   Future<List<StockEntity>> get followedStocks;
 
-  void add(StockEntity stock);
+  Future<void> add(StockEntity stock);
 
-  void update(StockEntity stock);
+  Future<void> update(StockEntity stock);
 
-  void delete(StockEntity stock);
+  Future<void> delete(StockEntity stock);
+
+  Future<void> dispose();
 }

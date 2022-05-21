@@ -30,4 +30,8 @@ class ConnectionCheckerService {
       }
     });
   }
+
+  Future<void> dispose() async {
+    await _connectionStreamController.close();
+  }
 }

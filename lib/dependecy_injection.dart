@@ -35,7 +35,7 @@ void setupDependency() {
   );
 
   getIt.registerLazySingleton<FollowStockDatasource>(
-    () => FollowStockLocalDatasource(),
+    () => FollowStockLocalDatasource()..init(),
   );
 
   // Search stock

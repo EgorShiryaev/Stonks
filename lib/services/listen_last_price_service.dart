@@ -22,7 +22,7 @@ class ListenLastPriceService {
     log("connecting...");
     try {
       if (_channel != null) {
-        await dispose();
+        await _channel!.close();
       }
       _channel = await WebSocket.connect(SETTINGS.websocketUrl);
       _setupWebSocketListner();
@@ -54,6 +54,14 @@ class ListenLastPriceService {
     });
   }
 
+  Future<void> dispose() async {
+    await _channel!.close();
+    if (_webSocketListner != null) {
+      await _webSocketListner!.cancel();
+    }
+    await _lastPriceStreamController.close();
+  }
+
   final _subscribes = <String>[];
 
   String _getSinkJson({
@@ -72,6 +80,7 @@ class ListenLastPriceService {
   }
 
   void unsubscribeToStockPrice(String ticker) {
+    // Необходимо, чтобы при перестройке списка не отписывалось от отображаемых акций
     if (_subscribes.where((element) => element == ticker).length == 1) {
       _channel!.add(_getSinkJson(isSubscribe: false, symbol: ticker));
     }
@@ -79,10 +88,8 @@ class ListenLastPriceService {
     log('Subscribes: $_subscribes');
   }
 
-  void unsubscribeToAllStocksPrice() {
+  void clearSubscribeArray() {
     _subscribes.clear();
     log('Subscribes: $_subscribes');
   }
-
-  Future<void> dispose() async => await _channel!.close();
 }
