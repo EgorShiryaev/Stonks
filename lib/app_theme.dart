@@ -47,5 +47,18 @@ class AppTheme {
       unselectedItemColor: Colors.grey,
     ),
     indicatorColor: Colors.black,
+    inputDecorationTheme: InputDecorationTheme(
+      fillColor: Colors.grey.shade300,
+      hintStyle: GoogleFonts.roboto(
+        color: Colors.black,
+        fontSize: 24,
+      ),
+      filled: true,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        gapPadding: 0,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
   );
 }
