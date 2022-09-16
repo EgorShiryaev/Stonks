@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class SETTINGS {
   static const _token = 'c8n2dviad3id1m4i8emg';
   static const _sandboxToken = 'sandbox_c8n2dviad3id1m4i8en0';
@@ -7,6 +9,8 @@ class SETTINGS {
 
   static String get websocketUrl => '$_websocketBaseUrl?token=$_token';
 
-  static Uri getUrl(String path) =>
-      Uri.parse('$_baseUrl/$path&token=$_sandboxToken');
+  static Uri getUrl(String path) {
+    log('$_baseUrl/$path&token=$_sandboxToken');
+    return Uri.parse('$_baseUrl/$path&token=$_sandboxToken');
+  }
 }

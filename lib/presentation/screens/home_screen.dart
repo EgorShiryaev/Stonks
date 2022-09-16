@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stonks/presentation/screens/exchange_stocks_screen.dart';
 
 import '../../domain/entity/entities.dart';
 import '../BLoCs/blocs.dart';
@@ -33,34 +34,39 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const StonksAppBarContent(),
       ),
       body: BlocListener<ListenLastPriceCubit, ListenLastPriceState>(
-        listener: (context, state) {
-          if (state is ListenLastPriceNewDataState) {
-            _onNewDataState(context, state.stocks);
-          } else if (state is ListenLastPriceConnectingState) {
-            _onConnectingState(context);
-          } else if (state is ListenLastPriceConnectedState) {
-            _onConnectedState(context);
-            onConnectService();
-          } else if (state is ListenLastPriceDisconnectedState) {
-            _onDisconnectedState(context);
-            onDisconnectService();
-          } else if (state is ListenLastPriceErrorConnectingState) {
-            _onErrorConnectingState(context);
-          }
-        },
-        child: _index == 0
-            ? FollowStocksScreen(
-                lastPriceServiceIsConnected: lastPriceServiceIsConnected,
-              )
-            : const SearchStocksScreen(),
-      ),
+          listener: (context, state) {
+            if (state is ListenLastPriceNewDataState) {
+              _onNewDataState(context, state.stocks);
+            } else if (state is ListenLastPriceConnectingState) {
+              _onConnectingState(context);
+            } else if (state is ListenLastPriceConnectedState) {
+              _onConnectedState(context);
+              onConnectService();
+            } else if (state is ListenLastPriceDisconnectedState) {
+              _onDisconnectedState(context);
+              onDisconnectService();
+            } else if (state is ListenLastPriceErrorConnectingState) {
+              _onErrorConnectingState(context);
+            }
+          },
+          child: _index == 0
+              ? const ExchangeStocksScreen()
+              : _index == 1
+                  ? FollowStocksScreen(
+                      lastPriceServiceIsConnected: lastPriceServiceIsConnected,
+                    )
+                  : const SearchStocksScreen()),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: onChangePage,
         items: const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.stacked_line_chart),
+            label: 'Биржа',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Мои акции',
+            label: 'Избранные',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
@@ -73,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onConnectService() => setState(() => lastPriceServiceIsConnected = true);
 
-  void onDisconnectService() => setState(() => lastPriceServiceIsConnected = false);
+  void onDisconnectService() =>
+      setState(() => lastPriceServiceIsConnected = false);
 
   void onChangePage(int index) {
     if (index == 0) {
