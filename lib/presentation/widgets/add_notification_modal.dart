@@ -38,28 +38,45 @@ class _AddNotificationModalState extends State<AddNotificationModal> {
             cursorColor: Colors.black12,
           ),
           const SizedBox(height: 10),
-          ListTile(
-            title: const Text(
-              'Выше',
-              style: TextStyle(fontSize: 18),
-            ),
-            leading: Radio<bool>(
-              value: true,
-              groupValue: large,
-              onChanged: onChangeLarge,
+          SizedBox(
+            width: double.infinity,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Radio<bool>(
+                        activeColor: Colors.black,
+                        value: true,
+                        groupValue: large,
+                        onChanged: onChangeLarge,
+                      ),
+                      const Text(
+                        'Выше',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Radio<bool>(
+                        activeColor: Colors.black,
+                        value: false,
+                        groupValue: large,
+                        onChanged: onChangeLarge,
+                      ),
+                      const Text(
+                        'Ниже',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
-          ListTile(
-            title: const Text(
-              'Ниже',
-              style: TextStyle(fontSize: 18),
-            ),
-            leading: Radio<bool>(
-              value: false,
-              groupValue: large,
-              onChanged: onChangeLarge,
-            ),
-          )
         ]),
       ),
       actions: [
