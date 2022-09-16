@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stonks/domain/entity/price_notification.dart';
+import 'package:stonks/presentation/screens/stock_chart_screen.dart';
 import '../../../domain/entity/entities.dart';
 import '../../BLoCs/blocs.dart';
 import '../add_notification_modal.dart';
@@ -173,41 +174,49 @@ class _FollowStockWidgetState extends State<FollowStockWidget> {
         ),
       ),
       onDismissed: _onDismissed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.stock.ticker,
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
-                  Text(
-                    widget.stock.title,
-                    style: Theme.of(context).textTheme.caption,
-                  )
-                ],
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StockChartScreen(stock: widget.stock),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.stock.ticker,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    Text(
+                      widget.stock.title,
+                      style: Theme.of(context).textTheme.caption,
+                    )
+                  ],
+                ),
               ),
-            ),
-            widget.stock.price != 0
-                ? Text(
-                    '${(widget.stock.price / 100).toStringAsFixed(2)} \$',
-                    style: Theme.of(context).textTheme.subtitle2,
-                  )
-                : const Icon(Icons.av_timer),
-            IconButton(
-              icon: Icon(
-                priceNotification == null
-                    ? Icons.notification_add
-                    : Icons.notifications_off,
+              widget.stock.price != 0
+                  ? Text(
+                      '${(widget.stock.price / 100).toStringAsFixed(2)} \$',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    )
+                  : const Icon(Icons.av_timer),
+              IconButton(
+                icon: Icon(
+                  priceNotification == null
+                      ? Icons.notification_add
+                      : Icons.notifications_off,
+                ),
+                onPressed: onPressNotificationIcon,
               ),
-              onPressed: onPressNotificationIcon,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

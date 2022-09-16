@@ -138,6 +138,7 @@ class _ExchangeStocksScreenState extends State<ExchangeStocksScreen> {
             if (!isLoading) {
               if (_stocks.isNotEmpty) {
                 return Scrollbar(
+                  isAlwaysShown: true,
                   child: ListView.separated(
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.symmetric(
