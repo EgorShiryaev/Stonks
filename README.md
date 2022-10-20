@@ -43,10 +43,24 @@
    тк биткоин торгуется всё время.
 2. Для проверки оптимизации рекомендуется добавить все акции из списка популярных акций.
    И следить за их ценой во время работы американской биржы: с 16.30 до 23:00 по МСК
-
+   
 # Архитектура приложения
 
 Для разделения бизнес логики и ui используется паттерн BLoC.
 Архитектура проекта соответсвует принципам чистой архитектуры
 
 # Скрины
+
+![CheckInternetConnection](https://user-images.githubusercontent.com/80877621/196949154-83df4da9-f0ee-4b7d-ae34-5c6ecae4fece.png)
+![ExchangesPage](https://user-images.githubusercontent.com/80877621/196949159-73fc2905-ddcb-4aee-b772-af64cc520a27.png)
+![SearchPage](https://user-images.githubusercontent.com/80877621/196949166-6379894e-5415-47e8-99ad-b352fb73bf0c.png)
+![SearchResultPage](https://user-images.githubusercontent.com/80877621/196949168-7096d777-e1bd-4445-bac3-e39c679d9283.png)
+![SetNotificationModal](https://user-images.githubusercontent.com/80877621/196949170-fa8232b9-718c-41e2-a8f4-7984a218ab3c.png)
+![FavoritesPage](https://user-images.githubusercontent.com/80877621/196949161-78674d00-c7ff-44b6-8d74-ef40bb10a6da.mov)
+
+# Награды
+
+![Отборочный этап](https://user-images.githubusercontent.com/80877621/196950892-cd64e130-53e8-4d00-8545-836a32d7f0f1.png)
+
+![Финальный этап](https://user-images.githubusercontent.com/80877621/196950914-40daaf21-820f-42dc-a6a8-7865441d31af.png)
+
