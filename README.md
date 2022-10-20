@@ -60,7 +60,8 @@
 ![SearchResultPage](https://user-images.githubusercontent.com/80877621/196949168-7096d777-e1bd-4445-bac3-e39c679d9283.png)
 
 ![SetNotificationModal](https://user-images.githubusercontent.com/80877621/196949170-fa8232b9-718c-41e2-a8f4-7984a218ab3c.png)
-![FavoritesPage](https://user-images.githubusercontent.com/80877621/196951322-7cd67dec-ab88-4791-8010-15e0ef377959.mp4)
+![FavoritesPage][https://user-images.githubusercontent.com/80877621/196953693-2a52bcc6-482a-4229-bd45-f478b6dd2ed2.MP4]
+
 
 # Награды
 
