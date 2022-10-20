@@ -196,7 +196,7 @@ class _ExchangeStocksScreenState extends State<ExchangeStocksScreen> {
 
   Future<void> getAll() async {
     final response = await Client()
-        .get(SETTINGS.getUrl('/stock/symbol?exchange=$currentExchange'));
+        .get(SETTINGS.getUrl('stock/symbol?exchange=$currentExchange'));
 
     if (response.statusCode == 200) {
       final List<dynamic> stocks = json.decode(response.body) as List<dynamic>;
