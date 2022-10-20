@@ -53,10 +53,12 @@
 
 ![CheckInternetConnection](https://user-images.githubusercontent.com/80877621/196949154-83df4da9-f0ee-4b7d-ae34-5c6ecae4fece.png)
 ![ExchangesPage](https://user-images.githubusercontent.com/80877621/196949159-73fc2905-ddcb-4aee-b772-af64cc520a27.png)
+
 ![SearchPage](https://user-images.githubusercontent.com/80877621/196949166-6379894e-5415-47e8-99ad-b352fb73bf0c.png)
 ![SearchResultPage](https://user-images.githubusercontent.com/80877621/196949168-7096d777-e1bd-4445-bac3-e39c679d9283.png)
+
 ![SetNotificationModal](https://user-images.githubusercontent.com/80877621/196949170-fa8232b9-718c-41e2-a8f4-7984a218ab3c.png)
-![FavoritesPage](https://user-images.githubusercontent.com/80877621/196949161-78674d00-c7ff-44b6-8d74-ef40bb10a6da.mov)
+![FavoritesPage](https://user-images.githubusercontent.com/80877621/196951322-7cd67dec-ab88-4791-8010-15e0ef377959.mp4)
 
 # Награды
 
