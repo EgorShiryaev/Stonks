@@ -62,8 +62,4 @@
 ![DeleteFavorite](https://user-images.githubusercontent.com/80877621/197196560-0681a248-07da-4a0d-a908-1f64822b82e4.png)
 ![FavoritesPage](https://user-images.githubusercontent.com/80877621/197196566-2d918ab5-a9c5-43ef-bb95-367c51ba97fa.png)
 
-[Видео страницы "Избранные"](https://user-images.githubusercontent.com/80877621/196953693-2a52bcc6-482a-4229-bd45-f478b6dd2ed2.MP4)
-
-
-
-
+[Видео страницы "Избранные"](https://user-images.githubusercontent.com/80877621/197197041-9db7c2c3-0e48-44bc-890d-058cf71cab48.MP4)
