@@ -53,10 +53,17 @@
 
 # Скрины
 
-![CheckInternetConnection](https://user-images.githubusercontent.com/80877621/196949154-83df4da9-f0ee-4b7d-ae34-5c6ecae4fece.png)
-![ExchangesPage](https://user-images.githubusercontent.com/80877621/196949159-73fc2905-ddcb-4aee-b772-af64cc520a27.png)
+![CheckingInternetConnection](https://user-images.githubusercontent.com/80877621/197196559-e8308121-83bf-45a5-8301-f41cb5868bbd.png)
+![ExchangeItemsPage](https://user-images.githubusercontent.com/80877621/197196563-95d71166-e2d4-46e2-8f3a-5437129e16d6.png)
 
-![SearchPage](https://user-images.githubusercontent.com/80877621/196949166-6379894e-5415-47e8-99ad-b352fb73bf0c.png)
-![SearchResultPage](https://user-images.githubusercontent.com/80877621/196949168-7096d777-e1bd-4445-bac3-e39c679d9283.png)
+![SearchPage](https://user-images.githubusercontent.com/80877621/197196570-6e41b57e-357e-412d-bdc2-e39e651b6ced.png)
+![AddToFavorites](https://user-images.githubusercontent.com/80877621/197196554-9a4f9dd3-6a11-46c8-9a98-0cdeaa2fe1e3.png)
+
+![DeleteFavorite](https://user-images.githubusercontent.com/80877621/197196560-0681a248-07da-4a0d-a908-1f64822b82e4.png)
+![FavoritesPage](https://user-images.githubusercontent.com/80877621/197196566-2d918ab5-a9c5-43ef-bb95-367c51ba97fa.png)
 
 [Видео страницы "Избранные"](https://user-images.githubusercontent.com/80877621/196953693-2a52bcc6-482a-4229-bd45-f478b6dd2ed2.MP4)
+
+
+
+
