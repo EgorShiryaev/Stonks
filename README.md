@@ -60,14 +60,4 @@
 ![SearchResultPage](https://user-images.githubusercontent.com/80877621/196949168-7096d777-e1bd-4445-bac3-e39c679d9283.png)
 
 ![SetNotificationModal](https://user-images.githubusercontent.com/80877621/196949170-fa8232b9-718c-41e2-a8f4-7984a218ab3c.png)
-
-
-![FavoritesPage](https://user-images.githubusercontent.com/80877621/196953693-2a52bcc6-482a-4229-bd45-f478b6dd2ed2.MP4)
-
-
-# Награды
-
-![Отборочный этап](https://user-images.githubusercontent.com/80877621/196950892-cd64e130-53e8-4d00-8545-836a32d7f0f1.png)
-
-![Финальный этап](https://user-images.githubusercontent.com/80877621/196950914-40daaf21-820f-42dc-a6a8-7865441d31af.png)
-
+[Видео страницы "Избранные"](https://user-images.githubusercontent.com/80877621/196953693-2a52bcc6-482a-4229-bd45-f478b6dd2ed2.MP4)
